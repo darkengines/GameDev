@@ -77,8 +77,10 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="THashSet.h" />
+    <ClInclude Include="THashTable.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="TArray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

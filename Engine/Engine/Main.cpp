@@ -1,27 +1,37 @@
 #include "System.h"
-#include "HashTable.h"
+#include "THashTable.h"
+#include "TArray.h"
 #include <iostream>
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	HashTable<int, int*>* t = new HashTable<int, int*>(10, 0);
-	int k = 69;
-	int v = 12345;
-	t->Insert(k, &v);
-	k = 79;
-	t->Insert(k, &v);
-	t->Remove(k);
-	k = 69;
-	int* f = *t->Find(k);
-	
-	int k1;
-	int* v1;
-	v1 = *t->GetFirst(&k1);
-	cout<<k1<<" "<<*v1<<endl;
-	v1 = *t->GetNext(&k1);
-	cout<<k1<<" "<<*v1<<endl;
+	TArray<int> a(128, 1);
+
+	int i = 0;
+	while (i<a.GetSize()) {
+		a[i] = i;
+		i++;
+	}
+	i = 28;
+	while (i<a.GetSize()) {
+		a.Remove(i);
+	}
+	i = 28;
+	while (i<256) {
+		a.Append(i);
+		i++;
+	}
+	a.Insert(512, 512);
+	i = 0;
+	while (i<a.GetSize()) {
+		cout<<a[i]<<endl;
+		i++;
+	}
+	cout<<a.GetSize()<<endl;
+	cout<<a.GetMaxSize()<<endl;
+
 	getchar();
 	return 0;
 }

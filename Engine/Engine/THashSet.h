@@ -1,82 +1,93 @@
 #include "System.h"
 
-template<class TKEY, class TVALUE>
-class HashItem {
+template<class TKEY>
+class THashSetItem {
 private:
-	TKEY& key;
-	TVALUE& value;
-	HashItem* next;
+	const TKEY& key;
+	THashSetItem* next;
 public:
-	HashItem(const TKEY& rtKey, const TVALUE& rtValue): key(rtKey), value(rtValue) {
+	THashSetItem(const TKEY& rtKey) {
+		key = new TKEY();
+		key = rtKey;
 		next = 0;
 	}
-	void SetKey(TKEY& rtKey) {
+	~THashSetItem() {
+	}
+	void SetKey(const TKEY& rtKey) {
 		key = rtKey;
 	}
-	void SetValue(TVALUE& rtValue) {
-		value = rtValue;
-	}
-	void SetNext(HashItem* pkNext) {
+	void SetNext(THashSetItem* pkNext) {
 		next = pkNext;
 	}
-	TKEY* GetKey()  {
+	const TKEY& GetKey() const  {
 		return key;
 	}
-	TVALUE* GetValue()  {
-		return value;
-	}
-	HashItem* GetNext()  {
+	THashSetItem* GetNext()  {
 		return next;
 	}
 };
 
-template<class TKEY, class TVALUE>
-class HashTable {
+template<class TKEY>
+class THashSet {
 private:
-	HashItem<TKEY, TVALUE>** hashItems;
-	HashItem<TKEY, TVALUE>* listIndex;
+	THashSetItem<TKEY>** hashItems;
+	THashSetItem<TKEY>* listIndex;
 	int itemIndex;
 	int size;
 public:
 	int (*UserHashFunction)(const TKEY&);
-	HashTable(int iSize, int (*pfUserHashFunction)(const TKEY&)) {
+	THashSet(int iSize, int (*pfUserHashFunction)(const TKEY&)) {
 		size = iSize;
 		UserHashFunction = pfUserHashFunction;
-		hashItems = (HashItem<TKEY, TVALUE>**)malloc(sizeof(HashItem<TKEY, TVALUE>*)*size);
+		hashItems = (THashSetItem<TKEY>**)malloc(sizeof(THashSetItem<TKEY>*)*size);
 		int i = 0;
 		while (i<size) {
 			hashItems[i]= 0;
 			i++;
 		}
 	}
-	
-	bool Insert(const TKEY& rtKey, const TVALUE& rtValue) {
-		HashItem<TKEY, TVALUE>* item = 0;
+	~THashSet() {
+		int i = 0;
+		THashSetItem<TKEY>* item = 0;
+		THashSetItem<TKEY>* temp = 0;
+		while (i<size) {
+			if ((item = hashItems[i]) != 0) {
+				while (item) {
+					temp = item->GetNext();
+					delete item;
+					item = temp;
+				}
+			}			
+			i++;
+		}
+	}
+	TKEY* Insert(const TKEY& rtKey) {
+		THashSetItem<TKEY>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
 		if (!item) {
-			hashItems[key] = new HashItem<TKEY, TVALUE>(rtKey, rtValue);
-			return true;
+			hashItems[key] = new THashSetItem<TKEY>(rtKey);
+			return hashItems[key]->GetKey();
 		} else {
 			while (item->GetKey() != rtKey && item->GetNext()) {
 				item = item->GetNext();
 			}
 			if (item->GetKey() != rtKey) {
-				item->SetNext(new HashItem<TKEY, TVALUE>(rtKey, rtValue));
-				return true;
+				item->SetNext(new THashSetItem<TKEY>(rtKey));
+				return hashItems[key]->GetKey();
 			}
-			return false;
+			return 0;
 		}
 	}
 
 	bool Remove(const TKEY& rtKey) {
-		HashItem<TKEY, TVALUE>* item = 0;
+		THashSetItem<TKEY>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
 		if (!item) {
 			return false;
 		} else {
-			HashItem<TKEY, TVALUE>* back = 0;
+			THashSetItem<TKEY>* back = 0;
 			while (item->GetKey() != rtKey && item->GetNext()) {
 				back = item;
 				item = item->GetNext();
@@ -94,8 +105,8 @@ public:
 		}
 	}
 
-	TVALUE* Find(const TKEY& rtKey) {
-		HashItem<TKEY, TVALUE>* item = 0;
+	const TKEY* Get(const TKEY& rtKey) const {
+		THashSetItem<TKEY, TVALUE>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
 		if (!item) {
@@ -106,11 +117,11 @@ public:
 				item = item->GetNext();
 				found = item->GetKey() == rtKey;
 			}
-			return found ? &item->GetValue() : 0;
+			return found ? &item->GetKey() : 0;
 		}
 	}
 
-	TVALUE* GetFirst(TKEY* ptKey) {
+	const TVALUE* GetFirst(TKEY* ptKey) const {
 		itemIndex = 0;
 		listIndex = 0;
 		while (!hashItems[itemIndex] && itemIndex < size) {
@@ -125,12 +136,12 @@ public:
 		return 0;
 	}
 
-	TVALUE* GetNext(TKEY* ptKey) {
+	const TVALUE* GetNext(TKEY* ptKey) const {
 		if (listIndex) {
 			if (listIndex->GetNext()) {
 				listIndex = listIndex->GetNext();
 				*ptKey = listIndex->GetKey();
-				return listIndex->GetValue();
+				return &listIndex->GetValue();
 			}
 			itemIndex++;
 			while (!hashItems[itemIndex] && itemIndex < size) {
@@ -139,7 +150,7 @@ public:
 			if (hashItems[itemIndex] && itemIndex < size) {
 				listIndex = hashItems[itemIndex];
 				*ptKey = listIndex->GetKey();
-				return listIndex->GetValue();
+				return &listIndex->GetValue();
 			} 
 		}
 		*ptKey = 0;
@@ -147,10 +158,10 @@ public:
 	}
 
 private:
-	int DefaultHashFunction(const TKEY& key) {
+	int DefaultHashFunction(const TKEY& key) const {
 		return key % size;
 	}
-	int Hash(const TKEY& rtKey) {
+	int Hash(const TKEY& rtKey) const {
 		if (UserHashFunction) {
 			return UserHashFunction(rtKey);
 		} else {
