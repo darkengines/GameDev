@@ -6,9 +6,7 @@ private:
 	const TKEY& key;
 	THashSetItem* next;
 public:
-	THashSetItem(const TKEY& rtKey) {
-		key = new TKEY();
-		key = rtKey;
+	THashSetItem(const TKEY& rtKey): key(rtKey) {
 		next = 0;
 	}
 	~THashSetItem() {
@@ -61,20 +59,20 @@ public:
 			i++;
 		}
 	}
-	TKEY* Insert(const TKEY& rtKey) {
+	const TKEY* Insert(const TKEY& rtKey) const {
 		THashSetItem<TKEY>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
 		if (!item) {
 			hashItems[key] = new THashSetItem<TKEY>(rtKey);
-			return hashItems[key]->GetKey();
+			return &hashItems[key]->GetKey();
 		} else {
 			while (item->GetKey() != rtKey && item->GetNext()) {
 				item = item->GetNext();
 			}
 			if (item->GetKey() != rtKey) {
 				item->SetNext(new THashSetItem<TKEY>(rtKey));
-				return hashItems[key]->GetKey();
+				return &hashItems[key]->GetKey();
 			}
 			return 0;
 		}
@@ -106,7 +104,7 @@ public:
 	}
 
 	const TKEY* Get(const TKEY& rtKey) const {
-		THashSetItem<TKEY, TVALUE>* item = 0;
+		THashSetItem<TKEY>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
 		if (!item) {
@@ -121,7 +119,7 @@ public:
 		}
 	}
 
-	const TVALUE* GetFirst(TKEY* ptKey) const {
+	const TKEY* GetFirst() {
 		itemIndex = 0;
 		listIndex = 0;
 		while (!hashItems[itemIndex] && itemIndex < size) {
@@ -129,19 +127,16 @@ public:
 		}
 		if (hashItems[itemIndex] && itemIndex < size) {
 			listIndex = hashItems[itemIndex];
-			*ptKey = listIndex->GetKey();
-			return &listIndex->GetValue();
+			return &listIndex->GetKey();
 		} 
-		*ptKey = 0;
 		return 0;
 	}
 
-	const TVALUE* GetNext(TKEY* ptKey) const {
+	const TKEY* GetNext() {
 		if (listIndex) {
 			if (listIndex->GetNext()) {
 				listIndex = listIndex->GetNext();
-				*ptKey = listIndex->GetKey();
-				return &listIndex->GetValue();
+				return &listIndex->GetKey();
 			}
 			itemIndex++;
 			while (!hashItems[itemIndex] && itemIndex < size) {
@@ -149,11 +144,9 @@ public:
 			}
 			if (hashItems[itemIndex] && itemIndex < size) {
 				listIndex = hashItems[itemIndex];
-				*ptKey = listIndex->GetKey();
-				return &listIndex->GetValue();
+				return &listIndex->GetKey();
 			} 
 		}
-		*ptKey = 0;
 		return 0;
 	}
 

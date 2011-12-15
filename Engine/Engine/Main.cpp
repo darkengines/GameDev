@@ -1,37 +1,31 @@
 #include "System.h"
 #include "THashTable.h"
 #include "TArray.h"
+#include "THashSet.h"
 #include <iostream>
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	TArray<int> a(128, 1);
-
-	int i = 0;
-	while (i<a.GetSize()) {
-		a[i] = i;
-		i++;
+	THashSet<int>* s = new THashSet<int>(10, 0);
+	int i = 1;
+	s->Insert(1);
+	s->Insert(2);
+	s->Insert(3);
+	s->Insert(4);
+	s->Insert(5);
+	s->Insert(6);
+	s->Insert(7);
+	s->Insert(8);
+	s->Insert(9);
+	s->Insert(10);
+	s->Insert(11);
+	const int* k = s->GetFirst();
+	cout<<*k<<endl;
+	while (k=s->GetNext()) {
+		cout<<*k<<endl;
 	}
-	i = 28;
-	while (i<a.GetSize()) {
-		a.Remove(i);
-	}
-	i = 28;
-	while (i<256) {
-		a.Append(i);
-		i++;
-	}
-	a.Insert(512, 512);
-	i = 0;
-	while (i<a.GetSize()) {
-		cout<<a[i]<<endl;
-		i++;
-	}
-	cout<<a.GetSize()<<endl;
-	cout<<a.GetMaxSize()<<endl;
-
 	getchar();
 	return 0;
 }
