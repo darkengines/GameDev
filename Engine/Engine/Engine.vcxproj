@@ -75,12 +75,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="String.h" />
     <ClInclude Include="THashSet.h" />
     <ClInclude Include="THashTable.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TArray.h" />
+    <ClInclude Include="TList.h" />
+    <ClInclude Include="TSet.h" />
+    <ClInclude Include="TStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
