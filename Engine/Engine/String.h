@@ -10,7 +10,9 @@ public:
 	~String();
 	int GetMemoryUsed() const;
 	int GetDiskUsed() const;
+	char* GetString() const;
 	String& operator=(const String& rcString);
+	String& operator=(const char* pcString);
 	bool operator==(const String& rcString) const;
 	bool operator!=(const String& rcString) const;
 	//operator unsigned int() const;
