@@ -79,6 +79,7 @@
     <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Math.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="THashSet.h" />
     <ClInclude Include="THashTable.h" />

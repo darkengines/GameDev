@@ -8,6 +8,10 @@
 #include <cstdlib>
 #include <cassert>
 #include <cstring>
+#include <cfloat>
+#include <ctype.h>
+#include <cmath>
+#include <ctime>
 
 #if defined(WIN32)
 #include <Windows.h>
@@ -23,6 +27,10 @@ public:
 	static int TestByteOrder();
 
 	static double GetTime();
+
+	static bool Load(const char* pcFileName, char*& pcBuffer, int& riSize);
+	static bool Save(const char* pcFileName, const char* pcBuffer, int iSize);
+	static bool Append(const char* pcFileName, const char* pcBuffer, int iSize);
 private:
 };
 

@@ -45,3 +45,38 @@ double System::GetTime() {
 	return count.QuadPart/frequency.QuadPart;
 #endif
 }
+
+bool System::Load(const char* pcFileName, char*& rpcBuffer, int& iSize) {
+	FILE* file = 0;
+	file = fopen(pcFileName, "rb");
+	if (!file) return false;
+	int result = 0;
+	fseek(file, 0, SEEK_END);
+	iSize = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	rpcBuffer = (char*)malloc(iSize);
+	result = fread(rpcBuffer, 1, iSize, file);
+	fclose(file);
+	EndianCopy(iSize, rpcBuffer);
+	return result == iSize;
+}
+
+bool System::Save(const char* pcFileName, const char* pcBuffer, int iSize) {
+	FILE* file = 0;
+	file = fopen(pcFileName, "wb");
+	if (!file) return false;
+	int result;
+	result = fwrite(pcBuffer, 1, iSize, file);
+	fclose(file);
+	return result == iSize;
+}
+
+bool System::Append(const char* pcFileName, const char* pcBuffer, int iSize) {
+	FILE* file = 0;
+	fopen(pcFileName, "wb");
+	if (!file) return false;
+	int result = 0;
+	fseek(file, 0, SEEK_END);
+	result = fwrite(pcBuffer, 1, iSize, file);
+	return result == iSize;
+}
