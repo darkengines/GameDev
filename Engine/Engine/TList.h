@@ -1,3 +1,6 @@
+#ifndef _TLIST_H_
+#define _TLIST_H_
+
 #include "System.h"
 
 template<class T>
@@ -36,3 +39,5 @@ public:
 	}
 private:
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef _TSET_H_
+#define _TSET_H_
+
 #include "System.h"
 
 template<class T>
@@ -95,3 +98,5 @@ private:
 	}
 	
 };
+
+#endif

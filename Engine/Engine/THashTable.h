@@ -1,3 +1,6 @@
+#ifndef _THASHTABLE_H_
+#define _THASHTABLE_H_
+
 #include "System.h"
 
 template<class TKEY, class TVALUE>
@@ -174,3 +177,5 @@ private:
 		}
 	}
 };
+
+#endif

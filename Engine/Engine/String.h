@@ -1,3 +1,6 @@
+#ifndef _STRING_H_
+#define _STRING_H_
+
 #include "System.h"
 
 class String {
@@ -18,3 +21,5 @@ public:
 	//operator unsigned int() const;
 private:
 };
+
+#endif

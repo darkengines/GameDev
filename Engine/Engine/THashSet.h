@@ -1,3 +1,6 @@
+#ifndef _THASHSET_H_
+#define _THASHSET_H_
+
 #include "System.h"
 
 template<class TKEY>
@@ -162,3 +165,5 @@ private:
 		}
 	}
 };
+
+#endif

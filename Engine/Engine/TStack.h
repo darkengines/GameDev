@@ -1,3 +1,6 @@
+#ifndef _TSTACK_H_
+#define _TSTACK_H_
+
 #include "System.h"
 
 template <class T>
@@ -45,3 +48,5 @@ public:
 	}
 private:
 };
+
+#endif

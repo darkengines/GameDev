@@ -1,3 +1,6 @@
+#ifndef _MATH_H_
+#define _MATH_H_
+
 #include "System.h"
 
 template<class Real>
@@ -99,3 +102,5 @@ public:
 	}
 private:
 };
+
+#endif
