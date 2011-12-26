@@ -88,8 +88,8 @@
     <ClInclude Include="TList.h" />
     <ClInclude Include="TSet.h" />
     <ClInclude Include="TStack.h" />
-    <ClInclude Include="Vector.h" />
-    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="TVector.h" />
+    <ClInclude Include="TVector2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
