@@ -10,60 +10,37 @@ private:
 public:
 	TVector2(): TVector() {
 	}
-	TVector2(Real* prValues): TVector(prValues) {
+	TVector2(const Real* prValues): TVector(prValues) {
 	}
 	Real& X() {
-		return *(values);
+		return _values[0];
 	}
 	Real& Y() {
-		return *(values+1);
+		return _values[1];
 	}
-	Real& operator[](int iIndex) {
-		return (TVector<Real, 2>::operator[](iIndex));
+	TVector2& operator=(const TVector2& rTVector) {
+		return static_cast<TVector2&>(TVector::operator=(rTVector));
 	}
-	// TVector x TVector operators
-	bool operator==(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator==(rTVector));
+	TVector2 operator+(const TVector2& rTVector) const {
+		return static_cast<TVector2&>(TVector::operator+(rTVector));
 	}
-	bool operator!=(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator!=(rTVector));
+	TVector2 operator-(const TVector2& rTVector) const {
+		return static_cast<TVector2&>(TVector::operator-(rTVector));
 	}
-	bool operator>(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator>(rTVector));
-	}
-	bool operator<(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator<(rTVector));
-	}
-	bool operator>=(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator>=(rTVector));
-	}
-	bool operator<=(const TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator<=(rTVector));
-	}
-	TVector2& operator=(const TVector2<Real>& rTVector) {
-		return (TVector2&)(TVector<Real, 2>::operator=(rTVector));
-	}
-	TVector2& operator+(TVector2<Real>& rTVector) const {
-		return (TVector2<Real>&)(TVector<Real, 2>::operator+(rTVector));
-	}
-	TVector2 operator-(TVector2<Real>& rTVector) {
-		return (TVector2)(TVector<Real, 2>::operator-(rTVector));
-	}
-	Real operator*(TVector2<Real>& rTVector) {
-		return (TVector<Real, 2>::operator*(rTVector));
-	}
-	// TTVector x Real operators
 	TVector2 operator+(const Real& rrValue) {
-		return (TVector2)(TVector<Real, 2>::operator+(rrValue));
+		return static_cast<TVector2&>(TVector::operator+(rrValue));
 	}
 	TVector2 operator-(const Real& rrValue) {
-		return (TVector2)(TVector<Real, 2>::operator-(rrValue));
+		return static_cast<TVector2&>(TVector::operator-(rrValue));
 	}
 	TVector2 operator*(const Real& rrValue) {
-		return (TVector2)(TVector<Real, 2>::operator*(rrValue));
+		return static_cast<TVector2&>(TVector::operator*(rrValue));
 	}
 	TVector2 operator/(const Real& rrValue) {
-		return (TVector2)(TVector<Real, 2>::operator/(rrValue));
+		return static_cast<TVector2&>(TVector::operator/(rrValue));
+	}
+	TVector2 Normalized() {
+		return static_cast<TVector2&>(TVector::Normalized());
 	}
 private:
 };

@@ -6,131 +6,138 @@
 template<class Real, int Size>
 class TVector {
 protected:
-	Real* values;
+	Real* _values;
 public:
 	TVector() {
-		values = (Real*)malloc(sizeof(Real)*Size);
+		_values = new Real[Size];
 	}
-	TVector(Real* prValues) {
-		values = prValues;
+	TVector(const Real* prValues) {
+		_values = new Real[Size];
+		unsigned int i = 0u;
+		while (i<Size) {
+			_values[i] = prValues[i];
+			++i;
+		}
+	}
+	TVector(const TVector& rtVector) {
+		_values = new Real[Size];
+		*this = rtVector;
 	}
 	virtual ~TVector() {
-		free(values);
+		delete[] _values;
 	}
 	virtual Real& operator[](int iIndex) {
-		return *(values+iIndex);
+		return _values[iIndex];
 	}
-	// TVector x TVector operators
-	virtual bool operator==(const TVector<Real, Size>& rTVector) {
-		int i = 0;
-		bool result = true;
+	virtual TVector& operator=(const TVector& rtVector) {
+		unsigned int i = 0u;
 		while (i<Size) {
-			result = result && (*(values+i) == *(rTVector.values+i));
-			i++;
-		}
-		return result;
-	}
-	virtual bool operator!=(const TVector<Real, Size>& rTVector) {
-		return !(*this==rTVector);
-	}
-	virtual bool operator>(const TVector<Real, Size>& rTVector) {
-		return memcmp(values, rTVector.values, Size) > 0;
-	}
-	virtual bool operator<(const TVector<Real, Size>& rTVector) {
-		return memcmp(values, rTVector.values, Size) < 0;
-	}
-	virtual bool operator>=(const TVector<Real, Size>& rTVector) {
-		return memcmp(values, rTVector.values, Size) >= 0;
-	}
-	virtual bool operator<=(const TVector<Real, Size>& rTVector) {
-		return memcmp(values, rTVector.values, Size) <= 0;
-	}
-	virtual TVector<Real, Size>& operator=(const TVector<Real, Size>& rTVector) {
-		int i = 0;
-		while (i<Size) {
-			*(values+i) = *(rTVector.values+i);
-			i++;
+			_values[i] = rtVector._values[i];
+			++i;
 		}
 		return *this;
 	}
-	virtual TVector<Real, Size>& operator+(const TVector<Real, Size>& rTVector) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
-		while (i<Size) {
-			*(result+i) += *(rTVector.values+i);
-			i++;
-		}
-		return TVector(result);
+	virtual TVector operator+(const TVector& rtVector) const {
+		TVector result(_values);
+		result += rtVector;
+		return result;
 	}
-	virtual void operator+=(const TVector<Real, Size>& rTVector) {
-		int i = 0;
+	virtual void operator+=(const TVector& rtVector) {
+		unsigned int i = 0u;
 		while (i<Size) {
-			*(values+i) += *(rTVector.values+i);
-			i++;
+			_values[i] += rtVector._values[i];
+			++i;
 		}
 	}
-	virtual TVector<Real, Size> operator-(const TVector<Real, Size>& rTVector) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
-		while (i<Size) {
-			*(result+i) -= *(rTVector.values+i);
-			i++;
-		}
-		return TVector<Real, Size>(result);
+	virtual TVector operator-(const TVector& rtVector) const {
+		TVector result(_values);
+		result -= rtVector;
+		return result;
 	}
-	virtual Real operator*(TVector<Real, Size>& rTVector) const {
-		int i = 0;
+	virtual void operator-=(const TVector& rtVector) {
+		unsigned int i = 0u;
+		while (i<Size) {
+			_values[i] -= rtVector._values[i];
+			++i;
+		}
+	}
+	virtual Real operator*(const TVector& rtVector) const {
 		Real result = 0;
+		unsigned int i = 0u;
 		while (i<Size) {
-			result += *(rTVector.values+i)**(values+i);
-			i++;
+			result += _values[i]*rtVector._values[i];
+			++i;
 		}
 		return result;
 	}
-	// TVector x Real operators
-	virtual TVector<Real, Size> operator+(const Real& rrValue) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
-		while (i<Size) {
-			*(result+i) += rrValue;
-			i++;
-		}
-		return TVector<Real, Size>(result);
+	virtual TVector operator+(const Real& rrValue) const {
+		TVector result(_values);
+		result += rrValue;
+		return result;
 	}
-	virtual TVector<Real, Size> operator-(const Real& rrValue) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
+	virtual void operator+=(const Real& rrValue) {
+		unsigned int i = 0u;
 		while (i<Size) {
-			*(result+i) -= rrValue;
-			i++;
+			_values[i] += rrValue;
+			++i;
 		}
-		return TVector<Real, Size>(result);
 	}
-	virtual TVector<Real, Size> operator*(const Real& rrValue) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
+	virtual TVector operator-(const Real& rrValue) const {
+		TVector result(_values);
+		result -= rrValue;
+		return result;
+	}
+	virtual void operator-=(const Real& rrValue) {
+		unsigned int i = 0u;
 		while (i<Size) {
-			*(result+i) *= rrValue;
-			i++;
+			_values[i] -= rrValue;
+			++i;
 		}
-		return TVector<Real, Size>(result);
 	}
-	virtual TVector<Real, Size> operator/(const Real& rrValue) const {
-		int i = 0;
-		Real* result = (Real*)malloc(sizeof(Real)*Size);
-		memcpy(result, values, Size);
+	virtual TVector operator*(const Real& rrValue) const {
+		TVector result(_values);
+		result *= rrValue;
+		return result;
+	}
+	virtual void operator*=(const Real& rrValue) {
+		unsigned int i = 0u;
 		while (i<Size) {
-			*(result+i) /= rrValue;
-			i++;
+			_values[i] *= rrValue;
+			++i;
 		}
-		return TVector<Real, Size>(result);
 	}
-private:
+	virtual TVector operator/(const Real& rrValue) const {
+		TVector result(_values);
+		result /= rrValue;
+		return result;
+	}
+	virtual void operator/=(const Real& rrValue) {
+		unsigned int i = 0u;
+		while (i<Size) {
+			_values[i] /= rrValue;
+			++i;
+		}
+	}
+	virtual Real SquaredMagnitude() {
+		Real result = 0;
+		unsigned int i = 0u;
+		while (i<Size) {
+			result+=_values[i]*_values[i];
+			++i;
+		}
+		return result;
+	}
+	virtual Real Magnitude() {
+		return sqrt(SquaredMagnitude());
+	}
+	virtual void Normalize() {
+		Real magnitude = Magnitude();
+		*this /= magnitude;
+	}
+	TVector Normalized() {
+		TVector result(_values);
+		result.Normalize();
+		return result;
+	}
 };
-
 #endif
