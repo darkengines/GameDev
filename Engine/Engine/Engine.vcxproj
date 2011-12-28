@@ -90,6 +90,7 @@
     <ClInclude Include="TStack.h" />
     <ClInclude Include="TVector.h" />
     <ClInclude Include="TVector2.h" />
+    <ClInclude Include="TVector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

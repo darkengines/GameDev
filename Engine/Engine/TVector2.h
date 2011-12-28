@@ -73,6 +73,17 @@ public:
 	Real DotPerp(const TVector2& rtVector) {
 		return *this*rtVector.Perped();
 	}
+	static void Orthonormalize(TVector2& rtVector1, TVector2& rtVector2) {
+		rtVector1.Normalize();
+		rtVector2 -= rtVector1*(rtVector1*rtVector2);
+		rtVector2.Normalize();
+	}
+	static void GenerateOrthonormalBasis(TVector2& rtVectorU, TVector2& rtVectorV, bool bUIsNormalized) {
+		if (!bUIsNormalized) {
+			rtVectorU.Normalize();
+		}
+		rtVectorV = rtVectorU.Perped();
+	}
 private:
 };
 

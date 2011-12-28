@@ -177,6 +177,5 @@ public:
 		result.Invert();
 		return result;
 	}
-	
 };
 #endif
