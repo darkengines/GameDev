@@ -29,6 +29,24 @@ public:
 	virtual Real& operator[](int iIndex) {
 		return _values[iIndex];
 	}
+	virtual bool operator==(const TVector& rtVector) const {
+		return !memcmp(_values, rtVector._values, Size*sizeof(Real));
+	}
+	virtual bool operator!=(const TVector& rtVector) const {
+		return !!memcmp(_values, rtVector._values, Size*sizeof(Real));
+	}
+	virtual bool operator>(const TVector& rtVector) const {
+		return memcmp(_values, rtVector._values, Size*sizeof(Real)) > 0;
+	}
+	virtual bool operator>=(const TVector& rtVector) const {
+		return memcmp(_values, rtVector._values, Size*sizeof(Real)) >= 0;
+	}
+	virtual bool operator<(const TVector& rtVector) const {
+		return memcmp(_values, rtVector._values, Size*sizeof(Real)) < 0;
+	}
+	virtual bool operator<=(const TVector& rtVector) const {
+		return memcmp(_values, rtVector._values, Size*sizeof(Real)) <= 0;
+	}
 	virtual TVector& operator=(const TVector& rtVector) {
 		unsigned int i = 0u;
 		while (i<Size) {
@@ -139,5 +157,26 @@ public:
 		result.Normalize();
 		return result;
 	}
+	void AddScaledVector(const TVector& rtVector, const Real& rrScale) {
+		*this+=rtVector*rrScale;
+	}
+	TVector AddedScaledVector(const TVector& rtVector, const Real& rrScale) {
+		TVector result(_values);
+		result.AddScaledVector(rtVector, rrScale);
+		return result;
+	}
+	void Invert() {
+		unsigned int i = 0u;
+		while (i<Size) {
+			_values[i] = -_values[i];
+			++i;
+		}
+	}
+	TVector Inverted() {
+		TVector result(_values);
+		result.Invert();
+		return result;
+	}
+	
 };
 #endif

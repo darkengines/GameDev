@@ -17,8 +17,8 @@ int main(int argc, char** argv) {
 	TVector2<float> v1 = TVector2<float>();
 	v1.X() = 10;
 	v1.Y() = 15;
-	v = v.Normalized();
-	cout<<v[0]<<","<<v[1]<<endl;
+	float r = v.DotPerp(v1);
+	cout<<r<<endl;
 	getchar();
 	return 0;
 }
