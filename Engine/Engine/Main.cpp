@@ -13,14 +13,40 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	TMatrixN<float, 4> m0(0.0f);
-	TMatrixN<float, 4> m1(5.0f);
-	m0.Identity();
-	m0.ToString();printf("\n");
-	m1.ToString();
+	
 
-	m0*=m1;
-	printf("\n");
+	m0[0][0] = 4;
+	m0[0][1] = -30;
+	m0[0][2] = 60;
+	m0[0][3] = -35;
+
+	m0[1][0] = -30;
+	m0[1][1] = 300;
+	m0[1][2] = -675;
+	m0[1][3] = 420;
+
+	m0[2][0] = 60;
+	m0[2][1] = -675;
+	m0[2][2] = 1620;
+	m0[2][3] = -1050;
+
+	m0[3][0] = -35;
+	m0[3][1] = 420;
+	m0[3][2] = -1050;
+	m0[3][3] = 700;
+
+	TMatrixN<float, 4> Q;
+
+	int i = 0;
+	while (i<3) {
+		Q = m0.QR();
+		m0 = Q*m0;
+		++i;
+	}
+
 	m0.ToString();
+	cout<<endl;
+	Q.ToString();
 
 	getchar();
 	return 0;

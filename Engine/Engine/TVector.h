@@ -146,7 +146,7 @@ public:
 		return result;
 	}
 	virtual Real Magnitude() {
-		return sqrt(SquaredMagnitude());
+		return sqrtf(SquaredMagnitude());
 	}
 	virtual void Normalize() {
 		Real magnitude = Magnitude();
@@ -176,6 +176,18 @@ public:
 		TVector result(_values);
 		result.Invert();
 		return result;
+	}
+	void SetAll(const Real rValue) {
+		unsigned int i = 0;
+		while (i<Size) {
+			_values[i] = rValue;
+			++i;
+		}
+	}
+	void Switch(const unsigned int iIndex0, unsigned int iIndex1) {
+		Real tmp = _values[iIndex0];
+		_values[iIndex0] = _values[iIndex1];
+		_values[iIndex1] = tmp;
 	}
 };
 #endif
