@@ -35,18 +35,16 @@ int main(int argc, char** argv) {
 	m0[3][2] = -1050;
 	m0[3][3] = 700;
 
-	TMatrixN<float, 4> Q;
+	TMatrixN<float, 4> EV;
+	TVector<float, 4> Ev;
 
-	int i = 0;
-	while (i<3) {
-		Q = m0.QR();
-		m0 = Q*m0;
-		++i;
-	}
+	cout<<FLT_EPSILON<<endl;
+	
+	m0.Jacobi(EV, Ev);
 
-	m0.ToString();
+	EV.ToString();
 	cout<<endl;
-	Q.ToString();
+	cout<<Ev[0]<<";"<<Ev[1]<<";"<<Ev[2]<<";"<<Ev[3]<<endl;
 
 	getchar();
 	return 0;

@@ -437,140 +437,78 @@ public:
 		return Q;
 	}
 
-	void Jacobi(TVector<Real, Order>& rtOutEigenValues, TMatrixN& rtOutEigenVectors) {
-		int i, k, l, m, state;
-		Real s, c, t, p, y;
-		TVector<int, Order> ind;
-		TVector<bool, Order> changed;
-
+	void Jacobi(TMatrixN& rtOutEigenVectors, TVector<Real, Order>& rtOutEigenValues) {
+		int i,j,ip,iq;
+		Real tresh, theta, tau, t, sm, s, h, g, c;
+		TVector<Real, Order> b, z;
 		rtOutEigenVectors.Identity();
-		state = Order;
-		k = 0;
-		while (k<Order) {
-			m = k+1;
-			i = k+2;
-			//maxind(k)
-			while (i<Order) {
-				if (abs(this->operator()(k, i)) > abs(this->operator()(k, m))) {
-					m = i;
-				}
-				++i;
-			}
-			ind[k] = m;
-			rtOutEigenValues[k] = this->operator()(k,k);
-			changed[k] = true; 
-			++k;
+		TMatrixN temp(this->_values, true);
+		for (ip = 0;ip<Order;++ip) {
+			b[ip] = rtOutEigenValues[ip] = temp[ip][ip];
+			z[ip] = 0;
 		}
-		while (state != 0) {
-			m = 0;
-			k = 1;
-			while (k<Order-1) {
-				if (fabs(this->operator()(k, ind[k])) > fabs(this->operator()(m, ind[m]))) {
-					m = k;
+		for (i=1;i<=50;++i) {
+			sm = 0;
+			for (ip=0;ip<Order-1;++ip) {
+				for (iq=ip+1;iq<Order;++iq) {
+					sm += abs(temp[ip][iq]);
 				}
-				++k;
-			}
-			k = m;
-			l = ind[m];
-			p = this->operator()(k, l);
-			y = (rtOutEigenValues[l]-rtOutEigenValues[k])/2;
-			t = fabs(y)+sqrtf(p*p+y*y);
-			s = sqrtf(p*p+t*t);
-			c = t/s;
-			s = p/s;
-			t = (p*p)/t;
-			if (y<0) {
-				s = -s;
-				t = -t;
-			}
-			this->operator()(k,l) = 0.0;
-
-			//update(k,−t);
-			y = rtOutEigenValues[k];
-			rtOutEigenValues[k] = y-t;
-			if (changed[k] && y == rtOutEigenValues[k]) {
-				changed[k] = false;
-				state--;
-			} else if (!changed[k] && y != rtOutEigenValues[k]) {
-				changed[k] = true;
-				state++;
-			}
-
-			//update(l,t);
-			y = rtOutEigenValues[l];
-			rtOutEigenValues[l] = y+t;
-			if (changed[l] && y == rtOutEigenValues[l]) {
-				changed[l] = false;
-				state--;
-			} else if (!changed[l] && y != rtOutEigenValues[l]) {
-				changed[l] = true;
-				state++;
-			}
-
-			i = 0;
-			while (i<=k) {
-				//rotate(i,k,i,l);
-				TVector<Real, 2> tmp;
-				tmp[0] = this->operator()(i,k);
-				tmp[1] = this->operator()(i,l);
-				this->operator()(i,k)= tmp[0]*c + tmp[1]*-s;
-				this->operator()(i,l)= tmp[0]*s + tmp[1]*c;
-				++i;
-			}
-			i = k+1;
-
-			while (i<=l) {
-				//rotate(k,i,i,l);
-				TVector<Real, 2> tmp;
-				tmp[0] = this->operator()(k,i);
-				tmp[1] = this->operator()(i,l);
-				this->operator()(k,i)= tmp[0]*c + tmp[1]*-s;
-				this->operator()(i,l)= tmp[0]*s + tmp[1]*c;
-				++i;
-			}
-			i = l+1;
-
-			while (i<Order) {
-				//rotate(k,i,l,i);
-				TVector<Real, 2> tmp;
-				tmp[0] = this->operator()(k,i);
-				tmp[1] = this->operator()(l,i);
-				this->operator()(k,i)= tmp[0]*c + tmp[1]*-s;
-				this->operator()(l,i)= tmp[0]*s + tmp[1]*c;
-				++i;
-			}
-
-			i = 0;
-			while (i<Order) {
-				Real tmp0, tmp1;
-				tmp0 = rtOutEigenVectors(k,i);
-				tmp1 = rtOutEigenVectors(l,i);
-				rtOutEigenVectors(k,i)= tmp0*c + tmp1*-s;
-				rtOutEigenVectors(l,i)= tmp0*s + tmp1*c;
-				++i;
-			}
-			//maxind(k)
-			m = k+1;
-			i = k+2;
-			while (i<Order) {
-				if (fabs(this->operator()(k, i)) > fabs(this->operator()(k, m))) {
-					m = i;
+				if (sm == 0) {
+					eigsrt(rtOutEigenValues, rtOutEigenVectors);
+					return;
 				}
-				++i;
-			}
-			ind[k] = m;
-			//maxind(l)
-			m = l+1;
-			i = l+2;
-			while (i<Order) {
-				if (fabs(this->operator()(l, i)) > fabs(this->operator()(l, m))) {
-					m = i;
+				if (i<4) {
+					tresh = 0.2*sm/(Order*Order);
+				} else {
+					tresh = 0;
 				}
-				++i;
+				for (ip=0;ip<Order-1;ip++) {
+					for (iq = ip+1; iq<Order; iq++) {
+						g = 100*abs(temp[ip][iq]);
+						if (i>4 && g<=FLT_EPSILON*abs(rtOutEigenValues[ip]) && g<=FLT_EPSILON*abs(rtOutEigenValues[iq])) {
+							temp[ip][iq] = 0;
+						} else if (abs(temp[ip][iq]) > tresh) {
+							h = rtOutEigenValues[iq]-rtOutEigenValues[ip];
+							if (g<=FLT_EPSILON*abs(h)) {
+								t = temp[ip][iq]/h;
+							} else {
+								theta = 0.5*h/(temp[ip][iq]);
+								t = 1/(abs(theta)+sqrt(1+theta*theta));
+								if (theta < 0) {
+									t = -t;
+								}
+								c=1/sqrt(1+t*t);
+								s = t*c;
+								tau = s/(1+c);
+								h = t*temp[ip][iq];
+								z[ip] -= h;
+								z[iq] += h;
+								rtOutEigenValues[ip] -= h;
+								rtOutEigenValues[iq] += h;
+								temp[ip][iq] = 0;
+								for (j=0;j<ip;j++) {
+									rot(temp, s, tau, j, ip, j, iq);
+								}
+								for (j=ip+1;j<iq;++j) {
+									rot(temp, s, tau, ip, j, j, iq);
+								}
+								for (j=iq+1;j<Order;++j) {
+									rot(temp, s, tau, ip, j, iq, j);
+								}
+								for (j=0; j<Order; ++j) {
+									rot(rtOutEigenVectors, s, tau, j, ip, j, iq);
+								}
+							}
+						}
+					}
+				}
+				for (ip=0;ip<Order;++ip) {
+						b[ip] += z[ip];
+						rtOutEigenValues[ip] = b[ip];
+						z[ip] = 0;
+					}
 			}
-			ind[l] = m;
 		}
-
 	}
 
 	void Identity() {
@@ -629,6 +567,31 @@ public:
 	}
 
 protected:
+	void rot(TMatrixN& rtIOMatrixN, const Real s, const Real tau, const int i, const int j, const int k, const int l) {
+		Real g= rtIOMatrixN[i][j];
+		Real h = rtIOMatrixN[k][l];
+		rtIOMatrixN[i][j] = g - s*(h+g*tau);
+		rtIOMatrixN[k][l] = h + s*(g-h*tau);
+	}
+	void eigsrt(TVector<Real, Order>& rtIOEigenValues, TMatrixN& rtIOEigenVectors) {
+		int k;
+		int n=Order;
+		for (int i = 0;i<n-1;++i) {
+			Real p = rtIOEigenValues[k=i];
+			for (int j=i;j<n;++j) {
+				if (rtIOEigenValues[j] >=p) p=rtIOEigenValues[k=j];
+			}
+			if (k!= i) {
+				rtIOEigenValues[k] = rtIOEigenValues[i];
+				rtIOEigenValues[i] = p;
+					for (int j=0;j<n;++j) {
+						p = rtIOEigenVectors[j][i];
+						rtIOEigenVectors[j][i] = rtIOEigenVectors[j][k];
+						rtIOEigenVectors[j][k] = p;
+					}
+			}
+		}
+	}
 	int Cofactor(unsigned int iRowIndex, unsigned int iColumnIndex) {
 		return (iRowIndex+iColumnIndex) % 2 ? -1 : 1;
 	}
