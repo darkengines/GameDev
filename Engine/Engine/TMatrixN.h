@@ -463,7 +463,7 @@ public:
 					tresh = 0;
 				}
 				for (ip=0;ip<Order-1;ip++) {
-					for (iq = ip+1; iq<Order; iq++) {
+					for (iq = ip+1; iq<Order; ++iq) {
 						g = 100*abs(temp[ip][iq]);
 						if (i>4 && g<=FLT_EPSILON*abs(rtOutEigenValues[ip]) && g<=FLT_EPSILON*abs(rtOutEigenValues[iq])) {
 							temp[ip][iq] = 0;
@@ -486,7 +486,7 @@ public:
 								rtOutEigenValues[ip] -= h;
 								rtOutEigenValues[iq] += h;
 								temp[ip][iq] = 0;
-								for (j=0;j<ip;j++) {
+								for (j=0;j<ip;++j) {
 									rot(temp, s, tau, j, ip, j, iq);
 								}
 								for (j=ip+1;j<iq;++j) {

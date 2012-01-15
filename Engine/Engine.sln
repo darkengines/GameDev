@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{0172426B-2A9D-49A9-A8B8-8B64C5B32A6F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelConverter", "ModelConverter\ModelConverter.vcxproj", "{60F1459E-EFF8-47D1-B35C-CCB976A8C356}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{0172426B-2A9D-49A9-A8B8-8B64C5B32A6F}.Debug|Win32.Build.0 = Debug|Win32
 		{0172426B-2A9D-49A9-A8B8-8B64C5B32A6F}.Release|Win32.ActiveCfg = Release|Win32
 		{0172426B-2A9D-49A9-A8B8-8B64C5B32A6F}.Release|Win32.Build.0 = Release|Win32
+		{60F1459E-EFF8-47D1-B35C-CCB976A8C356}.Debug|Win32.ActiveCfg = Debug|Win32
+		{60F1459E-EFF8-47D1-B35C-CCB976A8C356}.Debug|Win32.Build.0 = Debug|Win32
+		{60F1459E-EFF8-47D1-B35C-CCB976A8C356}.Release|Win32.ActiveCfg = Release|Win32
+		{60F1459E-EFF8-47D1-B35C-CCB976A8C356}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
