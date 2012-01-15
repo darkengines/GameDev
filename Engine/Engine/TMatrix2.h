@@ -5,7 +5,7 @@
 #include "TVector2.h"
 
 template<class Real>
-class TMatrix2: TMatrixN<Real, 2> {
+class TMatrix2: public TMatrixN<Real, 2> {
 public:
 	TMatrix2(): TMatrixN() {
 
@@ -52,14 +52,24 @@ public:
 	TMatrix2 Transposed() {
 		return static_cast<TMatrix2&>(TMatrixN::Transposed());
 	}
-	TVector2<Real> Row() {
-		return static_cast<TVector2<Real>&>(TMatrixN::Row());
+	TVector2<Real> Row(const unsigned int iIndex) {
+		return static_cast<TVector2<Real>&>(TMatrixN::Row(iIndex));
 	}
-	TVector2<Real> Column() {
-		return static_cast<TVector2<Real>&>(TMatrixN::Column());
+	TVector2<Real> Column(const unsigned int iIndex) {
+		return static_cast<TVector2<Real>&>(TMatrixN::Column(iIndex));
 	}
-	void SetRow(TVector2<Real>& rtVector) {
-		TMatrixN::SetRow(rtVector);
+	void SetRow(const unsigned int iIndex, const TVector2<Real>& rtVector) {
+		TMatrixN::SetRow(iIndex, rtVector);
+	}
+	void SetColumn(const unsigned int iIndex,const TVector2<Real>& rtVector) {
+		TMatrixN::SetColumn(iIndex, static_cast<TVector<Real, 2>>(rtVector));
+	}
+	Real ToAngle() const {
+		return atan2(this->operator()(1,0), this->operator()(0,0));
+	}
+	void Orthonormalize() {
+		SetColumn(0, Column(0).Normalized());
+		SetColumn(1, Column(1) - (Column(1)*((Column(1)*Column(0))/Column(0).SquaredMagnitude())));
 	}
 };
 

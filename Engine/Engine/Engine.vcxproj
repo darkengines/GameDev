@@ -86,6 +86,7 @@
     <ClInclude Include="System.h" />
     <ClInclude Include="TArray.h" />
     <ClInclude Include="TList.h" />
+    <ClInclude Include="TMatrix2.h" />
     <ClInclude Include="TMatrixN.h" />
     <ClInclude Include="TSet.h" />
     <ClInclude Include="TStack.h" />

@@ -26,7 +26,7 @@ public:
 	virtual ~TVector() {
 		delete[] _values;
 	}
-	virtual Real& operator[](int iIndex) {
+	virtual Real& operator[](const unsigned int iIndex) {
 		return _values[iIndex];
 	}
 	virtual bool operator==(const TVector& rtVector) const {

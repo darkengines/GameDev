@@ -253,7 +253,7 @@ public:
 			++i;
 		}
 	}
-	void SetColumn(const unsigned int iColumn, const TVector<Real, Order>& rtVector) {
+	void SetColumn(const unsigned int iColumn, TVector<Real, Order>& rtVector) {
 		unsigned int i = 0u;
 		while (i<Order) {
 			_values[i*Order+iColumn] = rtVector[i];
