@@ -225,6 +225,15 @@ public:
 			++i;
 		}
 	}
+	virtual Real Trace() const {
+		Real result = 0;
+		unsigned int i = 0;
+		while (i<Order) {
+			result += _values[i + i*Order];
+			++i;
+		}
+		return result;
+	}
 	void Cofactor() {
 		*this = Cofactored();
 	}
