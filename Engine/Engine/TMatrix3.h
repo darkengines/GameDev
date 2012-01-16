@@ -87,6 +87,18 @@ public:
 			rtVector.Z() = (_values[3*1+0] - _values[3*0+1])/(2*sin(rrAngle));
 		}
 	}
+	void FromAxisAngle(TVector3<Real>& rtVector, Real rAngle) {
+		TMatrix3 result;
+		TMatrix3 S;
+		result.Identity();
+		S[0][0] = 0;
+		S[1][1] = 0;
+		S[2][2] = 0;
+		S[1][0] = -S[0][1] = rtVector[2];
+		S[0][2] = -S[2][0] = rtVector[1];
+		S[2][1] = -S[1][2] = rtVector[0];
+		R += S*sin(rAngle) + S*S*(1-cos(rAngle))
+	}
 };
 
 #endif
