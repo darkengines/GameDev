@@ -1,13 +1,11 @@
 #ifndef _THASHTABLE_H_
 #define _THASHTABLE_H_
 
-#include "System.h"
-
 template<class TKEY, class TVALUE>
 class THashItem {
 private:
-	const TKEY& key;
-	const TVALUE& value;
+	const TKEY key;
+	const TVALUE value;
 	THashItem* next;
 public:
 	THashItem(const TKEY& rtKey, const TVALUE& rtValue): key(rtKey), value(rtValue) {
@@ -52,6 +50,23 @@ public:
 		while (i<size) {
 			hashItems[i]= 0;
 			i++;
+		}
+	}
+	THashTable(THashTable& rtHashTable) {
+		size = rtHashTable.size;
+		UserHashFunction = rtHashTable.UserHashFunction;
+		hashItems = (THashItem<TKEY, TVALUE>**)malloc(sizeof(THashItem<TKEY, TVALUE>*)*size);
+		int i = 0;
+		while (i<size) {
+			hashItems[i]= 0;
+			i++;
+		}
+		TKEY* key;
+		TVALUE* value;
+		value = rtHashTable.GetFirst(key);
+		while (key) {
+			Insert(key, *(value));
+			value = rtHashTable.GetNext(key);
 		}
 	}
 	~THashTable() {
@@ -113,7 +128,7 @@ public:
 		}
 	}
 
-	const TVALUE* Find(const TKEY& rtKey) const {
+	const TVALUE Find(const TKEY& rtKey) const {
 		THashItem<TKEY, TVALUE>* item = 0;
 		int key = Hash(rtKey);
 		item = hashItems[key];
@@ -125,7 +140,7 @@ public:
 				item = item->GetNext();
 				found = item->GetKey() == rtKey;
 			}
-			return found ? &item->GetValue() : 0;
+			return found ? item->GetValue() : 0;
 		}
 	}
 
