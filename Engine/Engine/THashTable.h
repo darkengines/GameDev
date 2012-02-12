@@ -69,20 +69,8 @@ public:
 			value = rtHashTable.GetNext(key);
 		}
 	}
-	~THashTable() {
-		int i = 0;
-		THashItem<TKEY, TVALUE>* item = 0;
-		THashItem<TKEY, TVALUE>* temp = 0;
-		while (i<size) {
-			if ((item = hashItems[i]) != 0) {
-				while (item) {
-					temp = item->GetNext();
-					delete item;
-					item = temp;
-				}
-			}			
-			i++;
-		}
+	~THashTable() {	
+		free(hashItems);
 	}
 	bool Insert(const TKEY& rtKey, const TVALUE& rtValue) {
 		THashItem<TKEY, TVALUE>* item = 0;
@@ -144,7 +132,7 @@ public:
 		}
 	}
 
-	const TVALUE* GetFirst(TKEY* ptKey) const {
+	const TVALUE GetFirst(TKEY* ptKey) {
 		itemIndex = 0;
 		listIndex = 0;
 		while (!hashItems[itemIndex] && itemIndex < size) {
@@ -152,19 +140,23 @@ public:
 		}
 		if (hashItems[itemIndex] && itemIndex < size) {
 			listIndex = hashItems[itemIndex];
-			*ptKey = listIndex->GetKey();
-			return &listIndex->GetValue();
+			if (ptKey) {
+				*ptKey = listIndex->GetKey();
+			}
+			return listIndex->GetValue();
 		} 
 		*ptKey = 0;
 		return 0;
 	}
 
-	const TVALUE* GetNext(TKEY* ptKey) const {
+	const TVALUE GetNext(TKEY* ptKey) {
 		if (listIndex) {
 			if (listIndex->GetNext()) {
 				listIndex = listIndex->GetNext();
-				*ptKey = listIndex->GetKey();
-				return &listIndex->GetValue();
+				if (ptKey) {
+					*ptKey = listIndex->GetKey();
+				}
+				return listIndex->GetValue();
 			}
 			itemIndex++;
 			while (!hashItems[itemIndex] && itemIndex < size) {
@@ -172,11 +164,13 @@ public:
 			}
 			if (hashItems[itemIndex] && itemIndex < size) {
 				listIndex = hashItems[itemIndex];
-				*ptKey = listIndex->GetKey();
-				return &listIndex->GetValue();
+				if (ptKey) {
+					*ptKey = listIndex->GetKey();
+				}
+				return listIndex->GetValue();
 			} 
 		}
-		*ptKey = 0;
+		ptKey = 0;
 		return 0;
 	}
 
