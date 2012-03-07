@@ -130,6 +130,9 @@ public:
 		result[2][2] = 0;
 		return result;
 	}
+	TMatrix3<Real> TensorProduct(const TVector3& rtVector) {
+		return static_cast<TMatrix3<Real>&>(TVector::TensorProduct(rtVector));
+	}
 private:
 };
 #endif

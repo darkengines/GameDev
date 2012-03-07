@@ -2,6 +2,10 @@
 #define _TVECTOR_H_
 
 #include "System.h"
+#include "TMatrixN.h"
+
+template<class Real, int Order>
+class TMartixN;
 
 template<class Real, int Size>
 class TVector {
@@ -27,6 +31,9 @@ public:
 		delete[] _values;
 	}
 	virtual Real& operator[](const unsigned int iIndex) {
+		return _values[iIndex];
+	}
+	virtual const Real& operator[](const unsigned int iIndex) const {
 		return _values[iIndex];
 	}
 	virtual bool operator==(const TVector& rtVector) const {
@@ -188,6 +195,20 @@ public:
 		Real tmp = _values[iIndex0];
 		_values[iIndex0] = _values[iIndex1];
 		_values[iIndex1] = tmp;
+	}
+	TMatrixN<Real, Size> TensorProduct(const TVector<Real, Size>& rtVector) {
+		TMatrixN<Real, Size> result;
+		unsigned int i, j;
+		i = j = 0;
+		while (i<Size) {
+			j = 0;
+			while (j<Size) {
+				result[i][j] =  _values[j] * rtVector[i];
+				++j;
+			}
+			++i;
+		}
+		return result;
 	}
 };
 #endif

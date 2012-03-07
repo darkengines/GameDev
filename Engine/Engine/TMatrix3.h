@@ -97,16 +97,13 @@ public:
 		result.Identity();
 		result *= cos(rAngle);
 		TMatrix3 cross = rtVector.SkewSym();
-		S[0][0] = 0;
-		S[1][1] = 0;
-		S[2][2] = 0;
-		S[0][1] = -rtVector[2];
-		S[1][0] = rtVector[2];
-		S[2][0] = -rtVector[1];
-		S[0][2] = rtVector[1];
-		S[1][2] = -rtVector[0];
-		S[2][1] = rtVector[0];
-		result += cross*sin(rAngle) + cross*cross*(1-cos(rAngle));
+		TMatrix3 tensor = rtVector.TensorProduct(rtVector);
+		result += cross*sin(rAngle) + tensor*(1-cos(rAngle));
+		int i = 0;
+		while (i<9) {
+			printf("%f\n", result._values[i]);
+			++i;
+		}
 		(*this)=result;
 	}
 };

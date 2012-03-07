@@ -17,8 +17,8 @@ int main(int argc, char** argv) {
 	m0.Identity();
 
 	TVector3<float> a;
-	a.X() = 0;
-	a.Y() = 1;
+	a.X() = 1;
+	a.Y() = 0;
 	a.Z() = 0;
 	float an;
 	an = -M_PI/6;

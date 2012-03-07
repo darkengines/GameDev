@@ -6,6 +6,9 @@
 
 using namespace std;
 
+template<class Real, int Size>
+class TVector;
+
 template<class Real, int Order>
 class TMatrixN {
 protected:
@@ -85,7 +88,7 @@ public:
 		return *this;
 	}
 	TMatrixN operator+(const TMatrixN& rtMatrixN) const {
-		TMatrixN result(rtMatrixN._values, true);
+		TMatrixN result(_values, true);
 		result+=rtMatrixN;
 		return result;
 	}
