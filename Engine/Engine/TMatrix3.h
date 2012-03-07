@@ -1,10 +1,14 @@
 #ifndef _TMATRIX3_H_
 #define _TMATRIX3_H_
+#pragma once
 
 #include "TMatrixN.h"
 #include "TVector3.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+template<class Real>
+class TVector3;
 
 template<class Real>
 class TMatrix3: public TMatrixN<Real, 3> {
@@ -91,13 +95,19 @@ public:
 		TMatrix3 result;
 		TMatrix3 S;
 		result.Identity();
+		result *= cos(rAngle);
+		TMatrix3 cross = rtVector.SkewSym();
 		S[0][0] = 0;
 		S[1][1] = 0;
 		S[2][2] = 0;
-		S[1][0] = -S[0][1] = rtVector[2];
-		S[0][2] = -S[2][0] = rtVector[1];
-		S[2][1] = -S[1][2] = rtVector[0];
-		R += S*sin(rAngle) + S*S*(1-cos(rAngle))
+		S[0][1] = -rtVector[2];
+		S[1][0] = rtVector[2];
+		S[2][0] = -rtVector[1];
+		S[0][2] = rtVector[1];
+		S[1][2] = -rtVector[0];
+		S[2][1] = rtVector[0];
+		result += cross*sin(rAngle) + cross*cross*(1-cos(rAngle));
+		(*this)=result;
 	}
 };
 

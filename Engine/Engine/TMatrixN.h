@@ -169,7 +169,7 @@ public:
 		}
 	}
 	TMatrixN operator*(const Real& rrValue) const {
-		TMatrixN result(rtMatrixN._values, true);
+		TMatrixN result(_values, true);
 		result*=rrValue;
 		return result;
 	}

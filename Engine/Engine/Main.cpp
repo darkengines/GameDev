@@ -13,21 +13,18 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-	TMatrix3<float> m0(4);
+	TMatrix3<float> m0(0);
+	m0.Identity();
 
-	m0[0][0] = 0.36;
-	m0[0][1] = 0.48;
-	m0[0][2] = -0.8;
-	m0[1][0] = -0.8;
-	m0[1][1] = 0.6;
-	m0[1][2] = 0;
-	m0[2][0] = 0.48;
-	m0[2][1] = 0.64;
-	m0[2][2] = 0.60;
-
+	TVector3<float> a;
+	a.X() = 0;
+	a.Y() = 1;
+	a.Z() = 0;
+	float an;
+	an = -M_PI/6;
 	float angle;
 	TVector3<float> axis;
-
+	m0.FromAxisAngle(a, an);
 	m0.ToAxisAngle(axis, angle);
 
 	cout<<"Angle: "<<angle<<endl;

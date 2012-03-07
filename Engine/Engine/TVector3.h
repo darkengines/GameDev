@@ -1,8 +1,12 @@
 #ifndef _TVECTOR3_H_
 #define _TVECTOR3_H_
+#pragma once
 
-#include "System.h"
 #include "TVector.h"
+#include "TMatrix3.h"
+
+template<class Real>
+class TMatrix3;
 
 template<class Real>
 class TVector3: public TVector<Real, 3> {
@@ -113,7 +117,19 @@ public:
 		rtVectorV.Normalize();
 		rtVectorW = rtVectorU.UnitCrossed(rtVectorV);
 	}
+	TMatrix3<Real> SkewSym() {
+		TMatrix3<Real> result;
+		result[0][0] = 0;
+		result[0][1] = -_values[2];
+		result[0][2] = _values[1];
+		result[1][0] = _values[2];
+		result[1][1] = 0;
+		result[1][2] = -_values[0];
+		result[2][0] = -_values[1];
+		result[2][1] = _values[0];
+		result[2][2] = 0;
+		return result;
+	}
 private:
 };
-
 #endif
