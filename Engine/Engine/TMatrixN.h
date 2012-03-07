@@ -16,6 +16,11 @@ protected:
 public:
 	TMatrixN() {
 		_values = new Real[Order*Order];
+		unsigned int i = 0;
+		while (i< Order*Order) {
+			_values[i] = 0;
+			++i;
+		}
 	}
 	TMatrixN(const Real* prValues, bool bRowMajor) {
 		unsigned int i = 0u;

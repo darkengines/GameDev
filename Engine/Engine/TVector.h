@@ -14,6 +14,11 @@ protected:
 public:
 	TVector() {
 		_values = new Real[Size];
+		unsigned int i = 0;
+		while (i<Size) {
+			_values[i] = 0;
+			++i;
+		}
 	}
 	TVector(const Real* prValues) {
 		_values = new Real[Size];

@@ -16,19 +16,17 @@ int main(int argc, char** argv) {
 	TMatrix3<float> m0(0);
 	m0.Identity();
 
-	TVector3<float> a;
-	a.X() = 1;
-	a.Y() = 0;
-	a.Z() = 0;
-	float an;
-	an = -M_PI/6;
-	float angle;
+	m0.FromEulerAngles(-M_PI/6, 0, 0);
 	TVector3<float> axis;
-	m0.FromAxisAngle(a, an);
+	float angle;
 	m0.ToAxisAngle(axis, angle);
 
 	cout<<"Angle: "<<angle<<endl;
 	cout<<"Axis: "<<axis.X()<<" "<<axis.Y()<<" "<<axis.Z()<<endl;
+
+	float x, y, z;
+	m0.ToEulerAnglesXYZ(x, y, z);
+	cout<<"EulerXYZ: "<<x<<", "<<y<<", "<<z<<endl;
 
 	getchar();
 	return 0;

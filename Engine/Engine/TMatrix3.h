@@ -99,12 +99,32 @@ public:
 		TMatrix3 cross = rtVector.SkewSym();
 		TMatrix3 tensor = rtVector.TensorProduct(rtVector);
 		result += cross*sin(rAngle) + tensor*(1-cos(rAngle));
-		int i = 0;
-		while (i<9) {
-			printf("%f\n", result._values[i]);
-			++i;
-		}
 		(*this)=result;
+	}
+	void ToEulerAnglesXYZ(Real& rrX, Real& rrY, Real& rrZ) {
+		if (abs(_values[6]) != 1) {
+			rrY = -asin(_values[6]);
+			rrX = atan2(_values[7]/cos(rrY), _values[8]/cos(rrY));
+			rrZ = atan2(_values[3]/cos(rrY), _values[0]/cos(rrY));
+		} else {
+			rrZ = 0;
+			if (_values[6] == -1) {
+				rrY = M_PI/2;
+				rrX = rrZ + atan2(_values[1], _values[2]);
+			} else {
+				rrY = -M_PI/2;
+				rrX = -rrZ + atan2(-_values[1], -_values[2]);
+			}
+		}
+	}
+	void FromEulerAngles(const Real rX, const Real rY, const Real rZ) {
+		TMatrix3 RX, RY, RZ;
+		TVector3<Real> AX, AY, AZ;
+		AX[0] = AY[1] = AZ[2] = 1;
+		RX.FromAxisAngle(AX, rX);
+		RY.FromAxisAngle(AY, rY);
+		RZ.FromAxisAngle(AZ, rZ);
+		(*this) = RZ*RY*RX;
 	}
 };
 

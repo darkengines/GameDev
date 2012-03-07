@@ -13,6 +13,7 @@ class TVector3: public TVector<Real, 3> {
 private:
 public:
 	TVector3(): TVector() {
+
 	}
 	TVector3(const Real* prValues): TVector(prValues) {
 	}
