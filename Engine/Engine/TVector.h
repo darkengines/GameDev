@@ -129,6 +129,11 @@ public:
 		result *= rrValue;
 		return result;
 	}
+	virtual TVector operator*(Real& rrValue) const {
+		TVector result(_values);
+		result *= rrValue;
+		return result;
+	}
 	virtual void operator*=(const Real& rrValue) {
 		unsigned int i = 0u;
 		while (i<Size) {
@@ -184,7 +189,7 @@ public:
 			++i;
 		}
 	}
-	TVector Inverted() {
+	TVector Inverted() const {
 		TVector result(_values);
 		result.Invert();
 		return result;
@@ -201,7 +206,7 @@ public:
 		_values[iIndex0] = _values[iIndex1];
 		_values[iIndex1] = tmp;
 	}
-	TMatrixN<Real, Size> TensorProduct(const TVector<Real, Size>& rtVector) {
+	const TMatrixN<Real, Size> TensorProduct(const TVector<Real, Size>& rtVector) const {
 		TMatrixN<Real, Size> result;
 		unsigned int i, j;
 		i = j = 0;
@@ -209,6 +214,20 @@ public:
 			j = 0;
 			while (j<Size) {
 				result[i][j] =  _values[j] * rtVector[i];
+				++j;
+			}
+			++i;
+		}
+		return result;
+	}
+	TMatrixN<Real, Size> TransposedProduct(const TVector<Real, Size>& rtVector) {
+		TMatrixN<Real, Size> result;
+		unsigned int i, j;
+		i = j = 0;
+		while (i<Size) {
+			j = 0;
+			while (j<Size) {
+				result[i][j] =  _values[i] * rtVector[j];
 				++j;
 			}
 			++i;

@@ -560,7 +560,6 @@ public:
 			++i;
 		}
 	}
-	
 	TMatrixN<Real, Order-1> Subed(unsigned int iRowIndex, unsigned int iColumnIndex) {
 		TMatrixN<Real, Order-1> result;
 		unsigned int i, j, k, l = 0u;

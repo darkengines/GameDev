@@ -57,7 +57,7 @@ public:
 		return result.UnitCross();
 	}
 	Real operator*(const TVector3& rTVector) const {
-		return TVector::operator*(rTVector);
+		return static_cast<Real>(TVector::operator*(rTVector));
 	}
 	TVector3 operator+(const Real& rrValue) {
 		return static_cast<TVector3&>(TVector::operator+(rrValue));
@@ -66,6 +66,9 @@ public:
 		return static_cast<TVector3&>(TVector::operator-(rrValue));
 	}
 	TVector3 operator*(const Real& rrValue) {
+		return static_cast<TVector3&>(TVector::operator*(rrValue));
+	}
+	TVector3 operator*(Real& rrValue) {
 		return static_cast<TVector3&>(TVector::operator*(rrValue));
 	}
 	TVector3 operator/(const Real& rrValue) {
@@ -77,9 +80,10 @@ public:
 	TVector3 AddedScaledVector(const TVector& rtVector, const Real& rrScale) {
 		return static_cast<TVector3&>(TVector::AddedScaledVector(rtVector, rrScale));
 	}
-	TVector3 Inverted() {
+	TVector3 Inverted() const {
 		return static_cast<TVector3&>(TVector::Inverted());
 	}
+	
 	void Perp() {
 		Real temp = _values[0];
 		_values[0] = _values[1];
@@ -131,8 +135,8 @@ public:
 		result[2][2] = 0;
 		return result;
 	}
-	TMatrix3<Real> TensorProduct(const TVector3& rtVector) {
-		return static_cast<TMatrix3<Real>&>(TVector::TensorProduct(rtVector));
+	TMatrix3<Real> TensorProduct(const TVector3<Real>& rtVector) const {
+		return static_cast<const TMatrix3<Real>&>(TVector::TensorProduct(rtVector));
 	}
 private:
 };

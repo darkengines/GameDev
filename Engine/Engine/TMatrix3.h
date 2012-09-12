@@ -93,7 +93,6 @@ public:
 	}
 	void FromAxisAngle(TVector3<Real>& rtVector, Real rAngle) {
 		TMatrix3 result;
-		TMatrix3 S;
 		result.Identity();
 		result *= cos(rAngle);
 		TMatrix3 cross = rtVector.SkewSym();
