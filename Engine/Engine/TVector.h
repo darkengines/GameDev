@@ -129,11 +129,6 @@ public:
 		result *= rrValue;
 		return result;
 	}
-	virtual TVector operator*(Real& rrValue) const {
-		TVector result(_values);
-		result *= rrValue;
-		return result;
-	}
 	virtual void operator*=(const Real& rrValue) {
 		unsigned int i = 0u;
 		while (i<Size) {

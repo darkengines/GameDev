@@ -68,9 +68,6 @@ public:
 	TVector3 operator*(const Real& rrValue) {
 		return static_cast<TVector3&>(TVector::operator*(rrValue));
 	}
-	TVector3 operator*(Real& rrValue) {
-		return static_cast<TVector3&>(TVector::operator*(rrValue));
-	}
 	TVector3 operator/(const Real& rrValue) {
 		return static_cast<TVector3&>(TVector::operator/(rrValue));
 	}
