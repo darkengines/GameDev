@@ -37,6 +37,9 @@ public:
 	Quaternion operator-(const Quaternion& rTVector) const {
 		return static_cast<Quaternion&>(TVector::operator-(rTVector));
 	}
+	Quaternion operator-() {
+		return static_cast<Quaternion&>(TVector::operator-());
+	}
 	Real operator*(const Quaternion& rTVector) const {
 		return TVector::operator*(rTVector);
 	}
@@ -121,33 +124,27 @@ public:
 		return TVector<Real, 4>::operator*(q);
 	}
 
-	Quaternion& Slerp(const Real& t, const Quaternion& q1, const Quaternion& q2, const Quaternion& q3) {
-		Real cosTheta = q1.Dot(q2);
-		Quaternion result = Quaternion();
-		if (cosTheta >= 1) {
-			return q1;
+	static Quaternion Slerp(const Real& t, const Quaternion& q0, const Quaternion& q1) {
+		if (t<=0) return q0;
+		if (t>=1) return q1;
+		Real cosTheta = q0.Dot(q1);
+		Quaternion result = q1;
+		if (cosTheta < 0) {
+			result = -result;
+			cosTheta = -cosTheta;
 		}
-		Real sinTheta = sqrt(1-cosTheta);
-		if (sinTheta < NEAR_ZERO) {
-			if (t <= 1/2) {
-				return sin(M_PI*(1/2-t))*q0+sin(M_PI*t)*q3;
-			} else {
-				return sin(M_PI*(1-t))*p+sin(M_PI*(t-1/2))*q1;
-			}
-		} else {
-			Real theta = acos(cosTheta)*2;
-			return (sin((1-t)*theta)*q0+sin(t*theta)*q1)/sin(theta);
-		}
-	}
-
-	Quaternion Slerp(const Real& t, const Quaternion& q0, const Quaternion& q1) {
-	Real cosTheta = q0.Dot(q1);
-		Quaternion result = Quaternion();
-		if (cosTheta >= 1) {
-			return q0;
+		if (cosTheta > 1-0.001) {
+			return Quaternion::Lerp(t, q0, result);
 		}
 		Real theta = acos(cosTheta)*2;
-		return q0*(sin((1-t)*theta)+q1*sin(t*theta))/sin(theta);
+		Real a = sin((1-t)*theta);
+		Real b = sin(t*theta);
+		Quaternion qq = q0;
+		return (qq*a+result*b)/sin(theta);
+	}
+
+	static Quaternion Lerp(const Real& t, const Quaternion& q0, const Quaternion& q1) {
+		return q0 + (q1-q0) * t;
 	}
 
 	TMatrix4<Real>& ToRotationMatrix() {

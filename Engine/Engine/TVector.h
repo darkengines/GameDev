@@ -84,6 +84,15 @@ public:
 		result -= rtVector;
 		return result;
 	}
+	virtual TVector operator-() const {
+		TVector result(_values);
+		int i = 0;
+		while (i<Size) {
+			_values[i] = -_values[i];
+			++i;
+		}
+		return result;
+	}
 	virtual void operator-=(const TVector& rtVector) {
 		unsigned int i = 0u;
 		while (i<Size) {
