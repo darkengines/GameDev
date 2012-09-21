@@ -39,14 +39,15 @@ public:
 		TVector3 result(_values);
 		return result %= rtVector;
 	}
-	void operator%=(const TVector3& rtVector) {
+	TVector3& operator%=(const TVector3& rtVector) {
 		Real x,y,z;
-		x = _value[0];
+		x = _values[0];
 		y = _values[1];
 		z = _values[2];
 		_values[0] = y * rtVector._values[2] - z * rtVector[1];
 		_values[1] = z * rtVector._values[0] - x * rtVector[2];
 		_values[2] = x * rtVector._values[1] - y * rtVector[0];
+		return *this;
 	}
 	void UnitCross(const TVector3& rtVector) {
 		*this%=rtVector;

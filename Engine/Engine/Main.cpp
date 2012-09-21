@@ -12,32 +12,32 @@
 #include "TMatrix3.h"
 #include "TMatrix4.h"
 #include "Quaternion.h"
+#include "TLine.h"
 using namespace std;
 
 int main(int argc, char** argv) {
-	Quaternion<float> q0 = Quaternion<float>();
-	q0[0] = 0;
-	q0[1] = 1;
-	q0[2] = 0;
-	q0[3] = M_PI/2;
+	TVector3<float> point;	
+	point[0] = 0;
+	point[1] = 0;
+	point[2] = 0;
 
-	Quaternion<float> q1 = Quaternion<float>();
-	
-	q1[0] = 1;
-	q1[1] = 1;
-	q1[2] = 1;
-	q1[3] = M_PI/4;
+	TVector3<float> direction;
+	direction[0] = 1;
+	direction[1] = 1;
+	direction[2] = 1;
 
-	q0.Dot(q1);
+	direction.Normalize();
 
-	float i = 0.0f;
-	while (i<1) {
-		Quaternion<float> q = Quaternion<float>::Slerp(i, q0, q1);
-		printf("[t=%3.4f] %3.4f %3.4f %3.4f %3.4f\n", i, q[0], q[1], q[2], q[3]);
-		i+=0.0001;
-	}
+	TVector3<float> anOtherPoint;
+	anOtherPoint[0] = 10;
+	anOtherPoint[1] = 5;
+	anOtherPoint[2] = 7;
 
-	q0.Slerp(0.2, q0, q1);
+	TLine<float> line(point, direction);
+
+	float distance = line.DistanceTo(anOtherPoint);
+
+	printf("distance=%f\n", distance);
 
 	getchar();
 	return 0;
