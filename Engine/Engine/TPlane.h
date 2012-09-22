@@ -27,6 +27,18 @@ public:
 		Normal = from.Normal;
 		Constant = from.Constant;
 	}
+
+	int WhichSide(const TVector3<Real>& p) const {
+		Real d= DistanceTo(p);
+		if (d < 0) return -1;
+		if (d > 0) return 1;
+		return d;
+	}
+
+	Real DistanceTo(const TVector3<Real>& p) const {
+		return Normal*p-Constant;
+	}
+
 	TVector3<Real> Normal;
 	Real Constant;
 	

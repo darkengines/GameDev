@@ -82,6 +82,8 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="TColorRGB.h" />
+    <ClInclude Include="TColorRGBA.h" />
     <ClInclude Include="THashSet.h" />
     <ClInclude Include="THashTable.h" />
     <ClInclude Include="System.h" />
@@ -92,6 +94,7 @@
     <ClInclude Include="TMatrix3.h" />
     <ClInclude Include="TMatrix4.h" />
     <ClInclude Include="TMatrixN.h" />
+    <ClInclude Include="TPlane.h" />
     <ClInclude Include="TSet.h" />
     <ClInclude Include="TStack.h" />
     <ClInclude Include="TVector.h" />
