@@ -80,7 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Rtti.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TColorRGB.h" />
     <ClInclude Include="TColorRGBA.h" />

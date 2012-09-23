@@ -13,31 +13,17 @@
 #include "TMatrix4.h"
 #include "Quaternion.h"
 #include "TLine.h"
+#include "TColorRGB.h"
+#include "Object.h"
+
 using namespace std;
 
 int main(int argc, char** argv) {
-	TVector3<float> point;	
-	point[0] = 0;
-	point[1] = 0;
-	point[2] = 0;
+	
+	TColorRGB<float> color(0.5,0.5,50);
+	color.ScaleByMax();
 
-	TVector3<float> direction;
-	direction[0] = 1;
-	direction[1] = 1;
-	direction[2] = 1;
-
-	direction.Normalize();
-
-	TVector3<float> anOtherPoint;
-	anOtherPoint[0] = 10;
-	anOtherPoint[1] = 5;
-	anOtherPoint[2] = 7;
-
-	TLine<float> line(point, direction);
-
-	float distance = line.DistanceTo(anOtherPoint);
-
-	printf("distance=%f\n", distance);
+	cout<<"r="<<color.R()<<" g="<<color.G()<<" b="<<color.B()<<endl;
 
 	getchar();
 	return 0;
