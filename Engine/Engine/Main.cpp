@@ -25,6 +25,9 @@ int main(int argc, char** argv) {
 
 	cout<<"r="<<color.R()<<" g="<<color.G()<<" b="<<color.B()<<endl;
 
+	Object* object = new Object();
+	Rtti rtti = object->GetType();
+
 	getchar();
 	return 0;
 }
