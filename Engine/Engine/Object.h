@@ -2,13 +2,13 @@
 #define _OBJECT_H_
 
 #include "Rtti.h"
-
 class Object {
-	public:
-		static const Rtti TYPE("Object", 0);
+private:
+	static const Rtti Type;
+public:
 		virtual const Rtti& GetType() const {
-			return TYPE;
+			return Object::Type;
 		}
 };
-
+const Rtti Object::Type = Rtti("Object",0);
 #endif

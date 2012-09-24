@@ -9,7 +9,7 @@ private:
 	char* data;
 public:
 	String();
-	String(char* pcString);
+	String(const char* pcString);
 	~String();
 	int GetMemoryUsed() const;
 	int GetDiskUsed() const;

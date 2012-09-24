@@ -2,7 +2,7 @@
 
 String::String() {length = 0;data = 0;}
 
-String::String(char* pcString) {
+String::String(const char* pcString) {
 		length = strlen(pcString);
 		data = (char*)malloc(length+1);
 		data[length] = '\0';

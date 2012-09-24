@@ -7,7 +7,7 @@
 
 int main(int argc, char** argv) {
 	ObjectModelConverter* mc = new ObjectModelConverter();
-	mc->Convert("dragon.obj", "dragon.mod");
+	mc->Convert("C:\\Users\\Quicksort\\Desktop\\test.obj", "test.mod");
 	getchar();
 	return 0;
 }
