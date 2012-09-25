@@ -2,37 +2,93 @@
 #define _OBJECT_H_
 
 #include "Rtti.h"
+#include "TArray.h"
+#include "THashTable.h"
 class Object {
 private:
 	static const Rtti Type;
+	String _name;
+	unsigned int _id;
+	static unsigned int _objectCount;
 public:
-		virtual const Rtti& GetType() const {
-			return Object::Type;
+	Object() {
+		_id = getNextId();
+		InUse.Insert(_id, this);
+	}
+	Object(Object& from) {
+
+	}
+	~Object() {
+		InUse.Remove(_id);
+	}
+	virtual const Rtti& GetType() const {
+		return Object::Type;
+	}
+	bool IsExactly(const Rtti& type) {
+		return Object::Type.IsExactly(type);
+	}
+	bool IsDerived(const Rtti& type) {
+		return Object::Type.IsDerived(type);
+	}
+	bool IsExactlyTypeOf(const Object* object) {
+		return Object::Type.IsExactly(object->Type);
+	}
+	bool IsDerivedTypeOf(const Object* object) {
+		return Object::Type.IsDerived(object->Type);
+	}
+	template<class T> T* StaticCast(Object* object) {
+		return (T*)object;
+	}
+	template<class T> const T* StaticCast(const Object* object) {
+		return (const T*)object;
+	}
+	template<class T> T* DynamicCast(Object* object) {
+		return object && object->IsDerived(T::Type) ? (T*)object : 0;
+	}
+	template<class T> const T* DynamicCast(const Object* object) {
+		return object && object->IsDerived(T::Type) ? (const T*)object : 0;
+	}
+	void SetName(const String& name) {
+		_name = name;
+	}
+	const String& GetName() const {
+		return _name;
+	}
+	unsigned int GetId() const {
+		return _id;
+	}
+	void IncrementReferences() {
+		_references++;	
+	}
+	void DecrementReferences() {
+		if (_references-- <= 0) {
+			delete this;
 		}
-		bool IsExactly(const Rtti& type) {
-			return Object::Type.IsExactly(type);
+	}
+	int GetReferences() const {
+		return _references;
+	}
+	static THashTable<unsigned int, Object*> InUse;
+	static void PrintInUse(const char* fileName, const char* message) {
+		FILE* file = fopen(fileName, "w");
+		fprintf(file, "%s:\n", message);
+		unsigned int key = 0;
+		Object* object = InUse.GetFirst(&key);
+		while (object) {
+			fprintf(file, "[id=%6ud] [name=%s]\n", object->_id, object->_name);
+			object = InUse.GetNext(&key);
 		}
-		bool IsDerived(const Rtti& type) {
-			return Object::Type.IsDerived(type);
-		}
-		bool IsExactlyTypeOf(const Object* object) {
-			return Object::Type.IsExactly(object->Type);
-		}
-		bool IsDerivedTypeOf(const Object* object) {
-			return Object::Type.IsDerived(object->Type);
-		}
-		template<class T> T* StaticCast(Object* object) {
-			return (T*)object;
-		}
-		template<class T> const T* StaticCast(const Object* object) {
-			return (const T*)object;
-		}
-		template<class T> T* DynamicCast(Object* object) {
-			return object && object->IsDerived(T::Type) ? (T*)object : 0;
-		}
-		template<class T> const T* DynamicCast(const Object* object) {
-			return object && object->IsDerived(T::Type) ? (const T*)object : 0;
-		}
+		fclose(file);
+	}
+	virtual Object* GetObjectByName(const String& name) = 0;
+	virtual void GetObjectsByName(const String& name, TArray<Object*>& objects) = 0;
+private:
+	static unsigned int getNextId() {
+		return _objectCount++;
+	}
+	int _references;
 };
 const Rtti Object::Type = Rtti("Object",0);
+THashTable<unsigned int, Object*> Object::InUse = THashTable<unsigned int, Object*>(32, 0);
+unsigned int Object::_objectCount = 0;
 #endif

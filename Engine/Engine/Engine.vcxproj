@@ -97,12 +97,16 @@
     <ClInclude Include="TMatrix4.h" />
     <ClInclude Include="TMatrixN.h" />
     <ClInclude Include="TPlane.h" />
+    <ClInclude Include="TPointer.h" />
     <ClInclude Include="TSet.h" />
     <ClInclude Include="TStack.h" />
     <ClInclude Include="TVector.h" />
     <ClInclude Include="TVector2.h" />
     <ClInclude Include="TVector3.h" />
     <ClInclude Include="TVector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
