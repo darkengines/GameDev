@@ -27,8 +27,8 @@ int main(int argc, char** argv) {
 	oa->SetName("objectA");
 	ob->SetName("objectB");
 
-	ObjectA::PrintInUse("test", "test");
-
+	ObjectA::PrintInUse(stdout, "test");
+	bool t = oa->IsExactlyTypeOf(ob);
 	getchar();
 	return 0;
 }
