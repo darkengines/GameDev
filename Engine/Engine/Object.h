@@ -13,6 +13,7 @@ public:
 	Object() {
 		_id = getNextId();
 		InUse.Insert(_id, this);
+		_references = 0;
 	}
 	Object(Object& from) {
 
@@ -24,10 +25,10 @@ public:
 		return Type;
 	}
 	bool IsExactly(const Rtti& type) {
-		return Object::Type.IsExactly(type);
+		return GetType().IsExactly(type);
 	}
 	bool IsDerived(const Rtti& type) {
-		return Object::Type.IsDerived(type);
+		return GetType().IsDerived(type);
 	}
 	bool IsExactlyTypeOf(const Object* object) {
 		return GetType().IsExactly(object->GetType());
@@ -60,7 +61,7 @@ public:
 		_references++;	
 	}
 	void DecrementReferences() {
-		if (_references-- <= 0) {
+		if (--_references <= 0) {
 			delete this;
 		}
 	}
@@ -73,10 +74,9 @@ public:
 		unsigned int key = 0;
 		Object* object = InUse.GetFirst(&key);
 		while (object) {
-			fprintf(file, "[id=%6d] [name=%32s]\n", object->_id, object->_name.GetString());
+			fprintf(file, "[id=%6u] [name=%32s]\n", object->_id, object->_name.GetString());
 			object = InUse.GetNext(&key);
 		}
-		fclose(file);
 	}
 	virtual Object* GetObjectByName(const String& name) = 0;
 	virtual void GetObjectsByName(const String& name, TArray<Object*>& objects) = 0;

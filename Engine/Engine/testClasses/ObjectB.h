@@ -1,3 +1,5 @@
+#ifndef _OBJECTB_H_
+#define _OBJECTB_H_
 
 #include "../Object.h"
 class ObjectB: public Object {
@@ -16,3 +18,5 @@ public:
 	virtual const Rtti& GetType() const { return Type; }
 };
 const Rtti ObjectB::Type("ObjectB", &Object::Type);
+typedef TPointer<ObjectB> ObjBPt;
+#endif

@@ -3,24 +3,67 @@
 
 template <class T> class TPointer {
 private:
-	Pointer(T* Object = 0);
-	Pointer(const Pointer& from);
-	~Pointer();
-
-	operator T*() const;
-	T& operator*() const;
-	T* operator->() const;
-
-	TPointer& operator=(T* object);
-	TPointer& operator=(const TPointer& reference);
-	bool operator==(T* object) const;
-	bool operator!=(T* object) const;
-	bool operator==(const TPointer& reference) const;
-	bool operator!=(const TPointer& reference) const;
+	
 public:
+	TPointer(T* object = 0) {
+		_object = object;
+		if (_object) {
+			_object->IncrementReferences();
+		}
+	}
+	TPointer(const TPointer& from) {
+		_object = from._object;
+		if (_object) {
+			_object->IncrementRefrences();
+		}
+	}
+	~TPointer() {
+		if (_object) {
+			_object->DecrementReferences();
+			_object = 0;
+		}
+	}
 
-private:
+	operator T*() const {
+		return _object;
+	}
+	T& operator*() const {
+		return *_object;
+	}
+	T* operator->() const {
+		return _object;
+	}
 
+	TPointer& operator=(T* object) {
+		if (object != _object) {
+			if (object) {
+				object->IncrementReferences();
+			}
+			if (_object) {
+				_object->DecrementReferences();
+			}
+			_object = object;
+		}
+		return *this;
+	}
+	TPointer& operator=(const TPointer& reference) {
+		*this = reference._object;
+		return *this;
+	}
+	bool operator==(T* object) const {
+		return _object == object;
+	}
+	bool operator!=(T* object) const {
+		return _object != object;
+	}
+	bool operator==(const TPointer& reference) const {
+		return _object == object;
+	}
+	bool operator!=(const TPointer& reference) const {
+		return _object != object;
+	}
+protected:
+	T* _object;
 };
 
 #endif
