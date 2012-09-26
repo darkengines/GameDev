@@ -86,6 +86,8 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="TColorRGB.h" />
     <ClInclude Include="TColorRGBA.h" />
+    <ClInclude Include="testClasses\ObjectA.h" />
+    <ClInclude Include="testClasses\ObjectB.h" />
     <ClInclude Include="THashSet.h" />
     <ClInclude Include="THashTable.h" />
     <ClInclude Include="System.h" />

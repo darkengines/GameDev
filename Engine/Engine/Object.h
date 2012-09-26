@@ -75,7 +75,7 @@ public:
 		unsigned int key = 0;
 		Object* object = InUse.GetFirst(&key);
 		while (object) {
-			fprintf(file, "[id=%6ud] [name=%s]\n", object->_id, object->_name);
+			fprintf(file, "[id=%6d] [name=%32s]\n", object->_id, object->_name.GetString());
 			object = InUse.GetNext(&key);
 		}
 		fclose(file);
