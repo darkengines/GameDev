@@ -15,7 +15,7 @@
 #include "TLine.h"
 #include "TColorRGB.h"
 #include "Object.h"
-#include "TPointer.h"
+#include "Controller.h"
 #include "testClasses\ObjectA.h"
 #include "testClasses\ObjectB.h"
 
@@ -32,8 +32,15 @@ int main(int argc, char** argv) {
 	ObjectA::PrintInUse(stdout, "test");
 	bool t = oa->IsExactlyTypeOf(ob);
 	oa->OB = 0;
+	ControllerPointer c = new Controller();
+	c->SetName("FuckingController");
+	ob->SetController(c);
+	ob->RemoveController(c);
 	ob = 0;
 	ObjectA::PrintInUse(stdout, "test");
+
+	c->PrintInUse(stdout, "shit");
+
 	getchar();
 	return 0;
 }

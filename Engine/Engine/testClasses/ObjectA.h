@@ -2,8 +2,8 @@
 #define _OBJECTA_H_
 
 #include "../Object.h"
-#include "ObjectB.h";
-#include "../TPointer.h";
+#include "ObjectB.h"
+#include "../TPointer.h"
 
 class ObjectA: public Object {
 private:

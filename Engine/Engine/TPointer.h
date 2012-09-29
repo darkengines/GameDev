@@ -3,7 +3,7 @@
 
 template <class T> class TPointer {
 private:
-	
+
 public:
 	TPointer(T* object = 0) {
 		_object = object;

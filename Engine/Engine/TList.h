@@ -22,7 +22,7 @@ public:
 	const T& GetItem() const {
 		return *item;
 	}
-	const TList* GetNext() const {
+	TList* GetNext() const {
 		return next;
 	}
 	TList* Next() const {
