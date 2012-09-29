@@ -92,13 +92,13 @@ public:
 
 	void SetController(Controller* controller) {
 		if (!_controllerList) {
-			_controllerList = new TList<TPointer<Controller>>(controller, 0);
+			_controllerList = new TList<TPointer<Controller>>(new TPointer<Controller>(controller), 0);
 		} else {
 			TList<TPointer<Controller>>* current = _controllerList;
 			while (current->GetNext()) {
 				current = current->GetNext();
 			}
-			current->SetNext(new TList<TPointer<Controller>>(controller, 0));
+			current->SetNext(new TList<TPointer<Controller>>(new TPointer<Controller>(controller), 0));
 		}
 	}
 
@@ -109,7 +109,7 @@ public:
 				TList<TPointer<Controller>>* last = 0;
 				bool found = 0;
 				while (!found && current) {
-					found = current->GetItem() == &*controller;
+					found = &*(current->GetItem()) == &*controller;
 					if (current->Next()) {
 						if (last) {
 							last->SetNext(current->Next());
@@ -118,6 +118,31 @@ public:
 					last = current;
 					current = current->GetNext();
 				}
+				if (found) {
+					delete last;
+				}
+			}
+		}
+	}
+	Controller* GetControllerAt(const int index) {
+		if (!_controllerList) return 0;
+		int i = 0;
+		TList<TPointer<Controller>>* current = _controllerList;
+		while (i <= index && current) {
+			if (i == index) return current->GetItem();
+			current = current->GetNext();
+			i++;
+		}
+		return 0;
+	}
+	void RemoveAllControllers() {
+		if (_controllerList) {
+			TList<TPointer<Controller>>* current = _controllerList;
+			TList<TPointer<Controller>>* last = 0;
+			while (current) {
+				last = current;
+				current = current->GetNext();
+				delete last;
 			}
 		}
 	}

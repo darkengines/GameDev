@@ -35,7 +35,8 @@ int main(int argc, char** argv) {
 	ControllerPointer c = new Controller();
 	c->SetName("FuckingController");
 	ob->SetController(c);
-	ob->RemoveController(c);
+	ControllerPointer test = ob->GetControllerAt(0);
+	ob->RemoveAllControllers();
 	ob = 0;
 	ObjectA::PrintInUse(stdout, "test");
 

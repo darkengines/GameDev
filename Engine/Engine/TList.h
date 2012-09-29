@@ -10,8 +10,12 @@ private:
 	TList* next;
 public:
 	TList() {}
-	TList(const T& rtItem, TList* pkNext): item(&rtItem), next(pkNext) {
-		
+	TList(const T* rtItem, TList* pkNext) {
+		item = rtItem;
+		next = pkNext;
+	}
+	~TList() {
+		delete item;
 	}
 	void SetItem(const T& rtItem) {
 		item = &rtItem;

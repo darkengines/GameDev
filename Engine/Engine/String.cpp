@@ -8,6 +8,9 @@ String::String(const char* pcString) {
 		data[length] = '\0';
 		memcpy(data, pcString, length);
 }
+String::String(const String& from) {
+	String(from.data);
+}
 int String::GetMemoryUsed() const {
 	return length;
 }
