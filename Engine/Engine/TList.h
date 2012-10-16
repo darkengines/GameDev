@@ -14,6 +14,10 @@ public:
 		item = rtItem;
 		next = pkNext;
 	}
+	TListItem(const TListItem<T>& from) {
+		item = from.GetItem();
+		next = from.GetNext();
+	}
 	~TListItem() {
 		delete item;
 	}
@@ -55,21 +59,37 @@ public:
 		_length = 0;
 	}
 	TList(const TList& from) {
-
+		TListItem<T>* current = from.Head();
+		TListItem<T>* previousCpy = 0;
+		while (current) {
+			if (previousCpy) {
+				previousCpy->SetNext(new TListItem<T>(*current));
+				previousCpy = previousCpy->GetNext();
+			} else {
+				_head = new TListItem(*current);
+				previousCpy = _head;
+			}
+			current = current->GetNext();
+		}
 	}
 	~TList() {
 
 	}
-	void AppendHead(const T& item) {
-		TListItem<T>* item = new TListItem<T>(rtItem, 0);
+	void AppendHead(const T& rtItem) {
+		TListItem<T>* item = new TListItem<T>(&rtItem, 0);
 		if (_head) {
 			item->SetNext(_head);
 		}
 		_head = item;
 	}
-	void AppendTail(const T& item) {
+	void AppendTail(const T& rtItem) {
 		TListItem<T>* item = new TListItem<T>(rtItem, 0);
-
+		TListItem<T>* tail = Tail();
+		if (tail) {
+			tail->SetNext(item);
+		} else {
+			_head = item;
+		}
 	}
 	TListItem<T>* Tail() {
 		TListItem<T>* current = _head;
@@ -82,9 +102,34 @@ public:
 		return _head;
 	}
 	void Remove(const T& item) {
-
+		TListItem<T>* current = _head;
+		TListItem<T>* previous = 0;
+		bool found = 0;
+		while (!found && current) {
+			found = &current->GetItem() == &item;
+			if (!found) {
+				previous = current;
+				current = current->GetNext();
+			}
+		}
+		if (found) {
+			if (previous) {
+				previous->SetNext(current->GetNext());
+			} else {
+				_head = current->GetNext();
+			}
+			delete current;
+		}
 	}
-
+	void Clear() {
+		TListItem<T>* current = _head;
+		while (current) {
+			TListItem<T>* tmp = current;
+			current = current->GetNext();
+			delete tmp;
+		}
+		_head = 0;
+	}
 	void Insert(const T& item, const T& previous) {
 
 	}
@@ -92,6 +137,14 @@ public:
 	const T& GetFirst() {
 		_cursor = _head;
 		return _cursor->GetItem();
+	}
+	const T& GetNext() {
+		_cursor = _cursor->GetNext();
+		if (_cursor) {
+			return _cursor->GetItem();
+		} else {
+			return 0;
+		}
 	}
 private:
 	TListItem<T>* _cursor;

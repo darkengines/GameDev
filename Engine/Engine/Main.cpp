@@ -2,7 +2,6 @@
 #include "THashTable.h"
 #include "TArray.h"
 #include "THashSet.h"
-#include "TList.h"
 #include "String.h"
 #include <iostream>
 #include "TVector2.h"
@@ -16,6 +15,7 @@
 #include "TColorRGB.h"
 #include "Object.h"
 #include "Controller.h"
+#include "TList.h"
 #include "testClasses\ObjectA.h"
 #include "testClasses\ObjectB.h"
 
@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
 	ControllerPointer c = new Controller();
 	c->SetName("FuckingController");
 	ob->SetController(c);
-	ControllerPointer test = ob->GetControllerAt(0);
 	ob->RemoveAllControllers();
 	ob = 0;
 	ObjectA::PrintInUse(stdout, "test");
