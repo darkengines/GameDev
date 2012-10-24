@@ -1,0 +1,122 @@
+Index: Engine/Object.h
+===================================================================
+--- Engine/Object.h	(revision 266)
++++ Engine/Object.h	(working copy)
+@@ -6,24 +6,23 @@
+ #include "TList.h"
+ #include "THashTable.h"
+ #include "TPointer.h"
++#include "Referencable.h"
+ 
+ class Controller;
+ 
+-class Object {
++class Object: public Referencable {
+ private:
+ 	String _name;
+ 	unsigned int _id;
+ 	static unsigned int _objectCount;
+-	int _references;
+ 	TList<TPointer<Controller>>* _controllerList;
+ public:
+-	Object() {
++	Object(): Referencable() {
+ 		_id = getNextId();
+ 		InUse.Insert(_id, this);
+-		_references = 0;
+ 		_controllerList = 0;
+ 	}
+-	Object(Object& from) {
++	Object(Object& from): Referencable(from) {
+ 
+ 	}
+ 	~Object() {
+@@ -65,17 +64,6 @@
+ 	unsigned int GetId() const {
+ 		return _id;
+ 	}
+-	void IncrementReferences() {
+-		_references++;	
+-	}
+-	void DecrementReferences() {
+-		if (--_references <= 0) {
+-			delete this;
+-		}
+-	}
+-	int GetReferences() const {
+-		return _references;
+-	}
+ 	static THashTable<unsigned int, Object*> InUse;
+ 	static void PrintInUse(FILE* file, const char* message) {
+ 		fprintf(file, "%s:\n", message);
+Index: Engine/Referencable.cpp
+===================================================================
+--- Engine/Referencable.cpp	(revision 0)
++++ Engine/Referencable.cpp	(working copy)
+@@ -0,0 +1,19 @@
++#include "Referencable.h"
++
++Referencable::Referencable() {
++	_references = 0;
++}
++Referencable::~Referencable() {
++
++}
++void Referencable::IncrementReferences() {
++	_references++;	
++}
++void Referencable::DecrementReferences() {
++	if (--_references <= 0) {
++		delete this;
++	}
++}
++int Referencable::GetReferences() const {
++	return _references;
++}
+\ No newline at end of file
+Index: Engine/Referencable.h
+===================================================================
+--- Engine/Referencable.h	(revision 0)
++++ Engine/Referencable.h	(working copy)
+@@ -0,0 +1,23 @@
++#ifndef _REFERENCABLE_H_
++#define _REFERENCABLE_H_
++
++class Referencable {
++public:
++	Referencable();
++	~Referencable();
++	void IncrementReferences() {
++		_references++;	
++	}
++	void DecrementReferences() {
++		if (--_references <= 0) {
++			delete this;
++		}
++	}
++	int GetReferences() const {
++		return _references;
++	}
++private:
++	int _references;
++}
++
++#endif
+\ No newline at end of file
+Index: Engine/TPointer.h
+===================================================================
+--- Engine/TPointer.h	(revision 259)
++++ Engine/TPointer.h	(working copy)
+@@ -57,10 +57,10 @@
+ 		return _object != object;
+ 	}
+ 	bool operator==(const TPointer& reference) const {
+-		return _object == object;
++		return _object == reference;
+ 	}
+ 	bool operator!=(const TPointer& reference) const {
+-		return _object != object;
++		return _object != reference;
+ 	}
+ protected:
+ 	T* _object;
