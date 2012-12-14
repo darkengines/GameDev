@@ -5,6 +5,13 @@
 
 class Controller: public Object {
 public:
+	Controller(): Object() {
+
+	}
+	Controller(Controller& from): Object(from) {
+
+	}
+
 	static const Rtti Type;
 	virtual const Rtti& GetType() const { return Type; }
 	Object* GetObjectByName(const String& name) {

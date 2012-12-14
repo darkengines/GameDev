@@ -1,6 +1,8 @@
 #ifndef _TPOINTER_H_
 #define _TPOINTER_H_
 
+#include "Object.h"
+
 template <class T> class TPointer {
 private:
 
@@ -14,7 +16,7 @@ public:
 	TPointer(const TPointer& from) {
 		_object = from._object;
 		if (_object) {
-			_object->IncrementRefrences();
+			_object->IncrementReferences();
 		}
 	}
 	~TPointer() {

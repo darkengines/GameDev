@@ -10,8 +10,8 @@ private:
 	TListItem* next;
 public:
 	TListItem() {}
-	TListItem(const T* rtItem, TListItem* pkNext) {
-		item = rtItem;
+	TListItem(const T& rtItem, TListItem* pkNext) {
+		item = &rtItem;
 		next = pkNext;
 	}
 	TListItem(const TListItem<T>& from) {
@@ -19,7 +19,7 @@ public:
 		next = from.GetNext();
 	}
 	~TListItem() {
-		delete item;
+
 	}
 	void SetItem(const T& rtItem) {
 		item = &rtItem;
@@ -76,11 +76,13 @@ public:
 
 	}
 	void AppendHead(const T& rtItem) {
-		TListItem<T>* item = new TListItem<T>(&rtItem, 0);
+		TListItem<T>* item = new TListItem<T>(rtItem, 0);
 		if (_head) {
 			item->SetNext(_head);
+		} else {
+			_head = item;
 		}
-		_head = item;
+		_length++;
 	}
 	void AppendTail(const T& rtItem) {
 		TListItem<T>* item = new TListItem<T>(rtItem, 0);

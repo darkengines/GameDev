@@ -12,16 +12,17 @@ class Controller;
 class Object {
 private:
 	String _name;
-	unsigned int _id;
 	static unsigned int _objectCount;
 	int _references;
 	TList<TPointer<Controller>>* _controllerList;
+protected:
+	unsigned int _id;
 public:
 	Object() {
 		_id = getNextId();
 		InUse.Insert(_id, this);
 		_references = 0;
-		_controllerList = 0;
+		_controllerList = new TList<TPointer<Controller>>();
 	}
 	Object(Object& from) {
 
@@ -90,7 +91,7 @@ public:
 	virtual void GetObjectsByName(const String& name, TArray<Object*>& objects) = 0;
 	static const Rtti Type;
 
-	void SetController(Controller* controller) {
+	void SetController(TPointer<Controller>& controller) {
 		_controllerList->AppendHead(controller);
 	}
 
@@ -108,5 +109,7 @@ private:
 const Rtti Object::Type("Object",0);
 THashTable<unsigned int, Object*> Object::InUse = THashTable<unsigned int, Object*>(32, 0);
 unsigned int Object::_objectCount = 0;
+
+#include "Controller.h"
 
 #endif

@@ -36,9 +36,10 @@ int main(int argc, char** argv) {
 	c->SetName("FuckingController");
 	ob->SetController(c);
 	ob->RemoveAllControllers();
-	ob = 0;
 	ObjectA::PrintInUse(stdout, "test");
-
+	c = 0;
+	ObjectA::PrintInUse(stdout, "test");
+	ob = 0;
 	c->PrintInUse(stdout, "shit");
 
 	getchar();
